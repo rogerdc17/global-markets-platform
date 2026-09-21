@@ -163,9 +163,11 @@ export default function TradingAgentPage() {
               <span>01 · Live market context</span>
               <span>02 · Deterministic technicals</span>
               <span>03 · Current web research</span>
-              <span>04 · Bull / bear challenge</span>
-              <span>05 · Risk & portfolio review</span>
-              <span>06 · Claude synthesis</span>
+              <span>04 · Specialist analyst team</span>
+              <span>05 · Bull / bear debate</span>
+              <span>06 · Trader Agent synthesis</span>
+              <span>07 · Risk Committee review</span>
+              <span>08 · Portfolio Manager decision</span>
             </div>
           </aside>
         </div>
@@ -191,8 +193,20 @@ export default function TradingAgentPage() {
               <div className="agent-conviction">
                 <span className={stanceClass(result.plan.stance)}>{result.plan.stance.toUpperCase()}</span>
                 <strong>{result.plan.confidence}%</strong>
-                <small>confidence</small>
+                <small>calibrated confidence</small>
               </div>
+            </div>
+
+            <div className="confidence-breakdown-grid">
+              <article><span>Data quality</span><strong>{result.confidence_breakdown.data_quality}%</strong></article>
+              <article><span>Source coverage</span><strong>{result.confidence_breakdown.source_coverage}%</strong></article>
+              <article><span>Agent agreement</span><strong>{result.confidence_breakdown.agent_agreement}%</strong></article>
+              <article><span>Model confidence</span><strong>{result.confidence_breakdown.model_confidence}%</strong></article>
+            </div>
+
+            <div className="decision-strip">
+              <span>Portfolio Manager decision</span>
+              <strong>{result.plan.decision.replaceAll("_", " ").toUpperCase()}</strong>
             </div>
 
             <div className="agent-report-grid">
@@ -239,6 +253,31 @@ export default function TradingAgentPage() {
                   <small>{agent.confidence}% confidence</small>
                   <p>{agent.summary}</p>
                   {agent.evidence.slice(0, 3).map((item) => <em key={item}>• {item}</em>)}
+                </article>
+              ))}
+            </div>
+
+            <div className="agent-section-head">
+              <div><p className="eyebrow">DECISION PIPELINE</p><h3>Debate → Trader → Risk → Portfolio Manager</h3></div>
+            </div>
+            <div className="stage-timeline">
+              {result.stages.map((stage, index) => (
+                <article className="stage-card" key={stage.stage + index}>
+                  <div className="stage-index">{String(index + 1).padStart(2, "0")}</div>
+                  <div className="stage-body">
+                    <div className="agent-view-top">
+                      <strong>{stage.stage}</strong>
+                      <span className={stanceClass(stage.stance)}>{stage.stance}</span>
+                    </div>
+                    <p>{stage.summary}</p>
+                    {stage.objections.length > 0 && (
+                      <div className="stage-objections">
+                        <small>Challenges</small>
+                        {stage.objections.slice(0, 3).map((item) => <em key={item}>• {item}</em>)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="stage-confidence">{stage.confidence}%</div>
                 </article>
               ))}
             </div>
