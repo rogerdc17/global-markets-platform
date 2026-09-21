@@ -48,7 +48,7 @@ async function fetchUpstox(env: Env) {
     throw new Error(`Upstox returned ${response.status}`);
   }
 
-  const raw = await response.json<any>();
+  const raw = (await response.json()) as { data?: unknown };
 
   // Keep provider-specific parsing inside this adapter.
   // When the final Upstox instrument universe is selected, map every
