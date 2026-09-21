@@ -80,10 +80,10 @@ export default function TradingAgentPage() {
       <section className="workspace-shell agent-workspace">
         <div className="agent-hero">
           <div>
-            <p className="eyebrow">PRIVATE TRADING INTELLIGENCE</p>
+            <p className="eyebrow">DP ALPHA · TRADING INTELLIGENCE</p>
             <h1 className="workspace-title">TradingAgent</h1>
             <p className="workspace-sub">
-              Multi-agent research, live market context, portfolio awareness and deterministic risk analysis in one trader workspace.
+              Dharmin's private research engine combining live market context, MyStocks portfolio awareness, current web evidence and deterministic risk controls.
             </p>
           </div>
           <div className="agent-stack-badge">
