@@ -11,8 +11,8 @@ export function generateMetadata({ params }: { params: Promise<{ symbol: string 
   return params.then(({ symbol }) => {
     const stock = stockMap[symbol.toLowerCase()];
     return {
-      title: stock ? `${stock.symbol} · Bharat Markets` : "Stock · Bharat Markets",
-      description: stock ? `${stock.name} market overview and chart.` : "Indian stock market overview.",
+      title: stock ? `${stock.symbol} · DP Alpha Terminal` : "Stock · DP Alpha Terminal",
+      description: stock ? `${stock.name} market overview and chart in DP Alpha Terminal.` : "Indian stock market overview.",
     };
   });
 }
