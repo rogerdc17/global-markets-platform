@@ -500,3 +500,24 @@ footer span { max-width: 760px; text-align: right; }
 
 .brand-terminal { color: var(--muted-2); font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-left: 4px; }
 .ledger-heading { margin-top: 10px; border-top: 1px solid var(--border); }
+
+.confidence-breakdown-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:18px 0; }
+.confidence-breakdown-grid article { border:1px solid var(--border); background:var(--surface); border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:end; gap:12px; }
+.confidence-breakdown-grid span { color:var(--muted-2); font-size:8px; text-transform:uppercase; letter-spacing:.08em; }
+.confidence-breakdown-grid strong { font-size:18px; }
+.decision-strip { display:flex; justify-content:space-between; gap:16px; align-items:center; border:1px solid var(--border); background:var(--surface); border-radius:10px; padding:13px 16px; margin-bottom:18px; }
+.decision-strip span { color:var(--muted-2); font-size:8px; text-transform:uppercase; letter-spacing:.08em; }
+.decision-strip strong { font-size:10px; letter-spacing:.06em; }
+.stage-timeline { display:flex; flex-direction:column; gap:10px; }
+.stage-card { display:grid; grid-template-columns:42px minmax(0,1fr) 70px; gap:14px; border:1px solid var(--border); background:var(--surface); border-radius:11px; padding:15px; align-items:start; }
+.stage-index { width:32px; height:32px; border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--muted-2); font-size:8px; }
+.stage-body p { margin:8px 0 0; color:var(--muted); font-size:10px; line-height:1.6; }
+.stage-objections { margin-top:10px; border-top:1px solid var(--border-soft); padding-top:8px; }
+.stage-objections small { display:block; color:var(--muted-2); font-size:8px; text-transform:uppercase; margin-bottom:4px; }
+.stage-objections em { display:block; color:var(--muted); font-size:9px; font-style:normal; line-height:1.5; }
+.stage-confidence { text-align:right; font-size:16px; font-weight:800; }
+@media (max-width:760px) {
+  .confidence-breakdown-grid { grid-template-columns:repeat(2,1fr); }
+  .stage-card { grid-template-columns:34px minmax(0,1fr); }
+  .stage-confidence { grid-column:2; text-align:left; font-size:11px; }
+}
