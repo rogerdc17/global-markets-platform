@@ -76,9 +76,9 @@ export default function Home() {
         </a>
 
         <nav className="desktop-nav" aria-label="Primary">
-          <a className="active" href="#overview">Overview</a>
-          <a href="#stocks">Stocks</a>
-          <a href="#movers">Movers</a>
+          <Link className="active" href="/">LiveMarket</Link>
+          <Link href="/my-stocks">MyStocks</Link>
+          <Link href="/trading-agent">TradingAgent</Link>
           <a href="#indices">Indices</a>
           <a href="#about">About</a>
         </nav>
