@@ -1,0 +1,7 @@
+name = "bharat-markets-market-api"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+MARKET_PROVIDER = "UPSTOX"
+ALLOWED_ORIGIN = "https://rogerdc17.github.io"
