@@ -406,3 +406,9 @@ footer span { max-width: 760px; text-align: right; }
 @media (max-width:760px) {
   .portfolio-summary { grid-template-columns:1fr 1fr; }
 }
+
+.preview-tag.live-source {
+  color: var(--green);
+  border-color: rgba(31, 208, 138, .28);
+  background: var(--green-bg);
+}
