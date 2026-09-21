@@ -1,3 +1,20 @@
+export type AgentView = {
+  name: string;
+  stance: "bullish" | "neutral" | "bearish" | "mixed";
+  confidence: number;
+  summary: string;
+  evidence: string[];
+};
+
+export type StageResult = {
+  stage: string;
+  stance: "bullish" | "neutral" | "bearish" | "mixed";
+  confidence: number;
+  summary: string;
+  evidence: string[];
+  objections: string[];
+};
+
 export type AgentResult = {
   run_id: string;
   symbol: string;
@@ -6,13 +23,15 @@ export type AgentResult = {
   market: Record<string, unknown>;
   technicals: Record<string, unknown>;
   risk: Record<string, unknown>;
-  agents: Array<{
-    name: string;
-    stance: "bullish" | "neutral" | "bearish" | "mixed";
-    confidence: number;
-    summary: string;
-    evidence: string[];
-  }>;
+  agents: AgentView[];
+  stages: StageResult[];
+  confidence_breakdown: {
+    data_quality: number;
+    source_coverage: number;
+    agent_agreement: number;
+    model_confidence: number;
+    calibrated_confidence: number;
+  };
   plan: {
     stance: "bullish" | "neutral" | "bearish" | "mixed";
     confidence: number;
@@ -23,6 +42,7 @@ export type AgentResult = {
     risk_reward?: string | null;
     position_size?: string | null;
     portfolio_note?: string | null;
+    decision: "consider_long" | "hold_or_wait" | "consider_short" | "avoid" | "insufficient_data";
   };
   sources: Array<{
     title: string;
