@@ -497,3 +497,6 @@ footer span { max-width: 760px; text-align: right; }
   .agent-result-head { align-items:flex-start; flex-direction:column; }
   .agent-conviction { text-align:left; }
 }
+
+.brand-terminal { color: var(--muted-2); font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-left: 4px; }
+.ledger-heading { margin-top: 10px; border-top: 1px solid var(--border); }
