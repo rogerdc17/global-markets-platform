@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type Stock = {
@@ -197,14 +198,14 @@ export default function Home() {
                       <div className="company-cell">
                         <span className="logo-chip">{stock.symbol.slice(0, 2)}</span>
                         <span>
-                          <strong>{stock.symbol}</strong>
+                          <Link className="stock-link" href={`/stocks/${stock.symbol.toLowerCase()}`}>{stock.symbol}</Link>
                           <small>{stock.name}</small>
                         </span>
                       </div>
                     </td>
                     <td><span className="exchange-badge">{stock.exchange}</span></td>
                     <td className="muted">{stock.sector}</td>
-                    <td className="num price">{formatPrice(stock.price)}</td>
+                    <td className="num price"><Link className="price-link" href={`/stocks/${stock.symbol.toLowerCase()}`}>{formatPrice(stock.price)}</Link></td>
                     <td className={`num ${stock.change >= 0 ? "up" : "down"}`}>
                       {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}
                     </td>
