@@ -35,6 +35,7 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_MARKET_API_BASE_URL: ${{ vars.MARKET_API_BASE_URL }}
+          NEXT_PUBLIC_TRADING_AGENT_API_BASE_URL: ${{ vars.TRADING_AGENT_API_BASE_URL }}
         run: npm run build
 
       - name: Upload static artifact
