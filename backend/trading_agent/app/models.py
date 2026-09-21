@@ -1,6 +1,8 @@
 from typing import Literal
 from pydantic import BaseModel, Field
 
+Stance = Literal["bullish", "neutral", "bearish", "mixed"]
+
 class Candle(BaseModel):
     timestamp: str
     open: float
@@ -36,13 +38,21 @@ class EvidenceSource(BaseModel):
 
 class AgentView(BaseModel):
     name: str
-    stance: Literal["bullish", "neutral", "bearish", "mixed"]
+    stance: Stance
     confidence: int = Field(ge=0, le=100)
     summary: str
     evidence: list[str] = []
 
+class StageResult(BaseModel):
+    stage: str
+    stance: Stance
+    confidence: int = Field(ge=0, le=100)
+    summary: str
+    evidence: list[str] = []
+    objections: list[str] = []
+
 class TradePlan(BaseModel):
-    stance: Literal["bullish", "neutral", "bearish", "mixed"]
+    stance: Stance
     confidence: int = Field(ge=0, le=100)
     thesis: str
     entry_zone: str | None = None
@@ -51,6 +61,13 @@ class TradePlan(BaseModel):
     risk_reward: str | None = None
     position_size: str | None = None
     portfolio_note: str | None = None
+    decision: Literal[
+        "consider_long",
+        "hold_or_wait",
+        "consider_short",
+        "avoid",
+        "insufficient_data"
+    ] = "insufficient_data"
 
 class AnalyzeResponse(BaseModel):
     run_id: str
@@ -61,6 +78,8 @@ class AnalyzeResponse(BaseModel):
     technicals: dict
     risk: dict
     agents: list[AgentView]
+    stages: list[StageResult]
+    confidence_breakdown: dict
     plan: TradePlan
     sources: list[EvidenceSource]
     caveats: list[str]
