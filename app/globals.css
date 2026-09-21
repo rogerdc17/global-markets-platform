@@ -217,3 +217,120 @@ footer span { max-width: 760px; text-align: right; }
   footer { margin: 0 18px; padding: 22px 0 36px; flex-direction: column; }
   footer span { text-align: left; }
 }
+
+
+.stock-link, .price-link { transition: color .18s ease; }
+.stock-link { font-weight: 800; }
+.stock-link:hover, .price-link:hover { color: var(--accent); }
+.detail-page { min-height: 100vh; }
+.stock-detail-shell { max-width: var(--max); margin: 0 auto; padding: 30px 30px 74px; }
+.stock-breadcrumb { display: flex; gap: 9px; color: var(--muted-2); font-size: 10px; margin-bottom: 28px; }
+.stock-breadcrumb a:hover { color: var(--text); }
+.stock-breadcrumb strong { color: var(--muted); }
+.stock-identity {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  padding-bottom: 28px; border-bottom: 1px solid var(--border);
+}
+.stock-title-block { display: flex; align-items: center; gap: 16px; }
+.detail-logo {
+  width: 58px; height: 58px; border: 1px solid #2b3b4d; border-radius: 14px;
+  background: var(--surface-2); display: grid; place-items: center;
+  color: #bdcad8; font-size: 15px; font-weight: 900;
+}
+.symbol-line { display: flex; align-items: center; gap: 11px; }
+.symbol-line h1 { margin: 0; font-size: 35px; letter-spacing: -.045em; }
+.stock-title-block p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+.quote-block { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.quote-block > strong { font-size: 32px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.quote-block > span { font-size: 12px; font-weight: 850; }
+.quote-block small { color: var(--muted-2); font-size: 9px; }
+
+.stock-detail-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 18px; margin-top: 18px;
+}
+.chart-card, .company-card, .related-card {
+  border: 1px solid var(--border); border-radius: 13px; background: var(--surface);
+}
+.chart-card { padding: 22px 22px 0; overflow: hidden; }
+.chart-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.chart-head h2, .company-card h2 { margin: 0; font-size: 21px; letter-spacing: -.03em; }
+.time-tabs { display: flex; gap: 4px; }
+.time-tabs button {
+  border: 0; background: transparent; color: var(--muted); padding: 7px 9px;
+  border-radius: 6px; font-size: 9px; font-weight: 800;
+}
+.time-tabs button.selected { background: var(--surface-2); color: var(--text); }
+.price-chart { margin-top: 22px; }
+.price-chart svg { display: block; width: 100%; height: auto; min-height: 260px; }
+.chart-grid-line { stroke: var(--border-soft); stroke-width: 1; stroke-dasharray: 4 7; }
+.chart-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.positive-line { stroke: var(--green); }
+.negative-line { stroke: var(--red); }
+.chart-dot { stroke: var(--surface); stroke-width: 3; }
+.positive-dot { fill: var(--green); }
+.negative-dot { fill: var(--red); }
+.chart-axis { display: flex; justify-content: space-between; color: var(--muted-2); font-size: 9px; padding: 0 4px 16px; }
+.ohlc-grid {
+  margin: 0 -22px; border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.ohlc-grid div { padding: 15px 17px; border-right: 1px solid var(--border-soft); display: flex; flex-direction: column; gap: 5px; }
+.ohlc-grid div:last-child { border-right: 0; }
+.ohlc-grid span { color: var(--muted-2); font-size: 9px; text-transform: uppercase; letter-spacing: .07em; }
+.ohlc-grid strong { font-size: 11px; font-variant-numeric: tabular-nums; }
+
+.detail-side { display: flex; flex-direction: column; gap: 18px; }
+.stats-card { padding-bottom: 12px; }
+.stat-line {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-top: 1px solid var(--border-soft); font-size: 10px;
+}
+.stat-line span { color: var(--muted); }
+.stat-line strong { font-size: 10px; text-align: right; max-width: 55%; }
+.range-values { display: flex; justify-content: space-between; color: var(--muted); font-size: 9px; margin-bottom: 10px; }
+.range-track { position: relative; height: 5px; border-radius: 99px; background: #182431; margin: 9px 4px 11px; }
+.range-progress { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--muted-2), var(--accent)); }
+.range-track i {
+  position: absolute; top: 50%; width: 11px; height: 11px; border-radius: 50%;
+  transform: translate(-50%, -50%); background: var(--accent); border: 2px solid var(--surface);
+}
+.current-range-label { color: var(--muted-2); text-align: center; font-size: 9px; }
+
+.detail-lower-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 18px; margin-top: 18px; }
+.company-card { padding: 22px; }
+.company-card > p:not(.eyebrow) { max-width: 820px; color: var(--muted); font-size: 12px; line-height: 1.75; }
+.company-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 18px; }
+.company-tags span { border: 1px solid var(--border); border-radius: 99px; padding: 6px 9px; color: var(--muted); font-size: 9px; }
+.related-card { padding: 20px; }
+.related-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 0; border-top: 1px solid var(--border-soft);
+}
+.related-row > span:first-child { display: flex; flex-direction: column; gap: 3px; }
+.related-row strong { font-size: 11px; }
+.related-row small { color: var(--muted); font-size: 9px; }
+.related-row > span:last-child { font-size: 10px; font-weight: 850; }
+.related-empty { font-size: 10px; line-height: 1.6; }
+.concept-disclaimer {
+  margin-top: 18px; padding: 12px 14px; border: 1px solid var(--border-soft); border-radius: 9px;
+  color: var(--muted-2); background: rgba(255,255,255,.012); font-size: 9px; line-height: 1.6;
+}
+
+@media (max-width: 1050px) {
+  .stock-detail-grid, .detail-lower-grid { grid-template-columns: 1fr; }
+  .detail-side { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .stock-detail-shell { padding: 24px 18px 54px; }
+  .stock-identity { align-items: flex-start; flex-direction: column; }
+  .quote-block { align-items: flex-start; }
+  .quote-block > strong { font-size: 28px; }
+  .symbol-line h1 { font-size: 28px; }
+  .detail-logo { width: 50px; height: 50px; }
+  .chart-head { flex-direction: column; }
+  .price-chart svg { min-height: 210px; }
+  .ohlc-grid { grid-template-columns: repeat(2, 1fr); }
+  .ohlc-grid div:nth-child(2) { border-right: 0; }
+  .ohlc-grid div:nth-child(-n+2) { border-bottom: 1px solid var(--border-soft); }
+  .detail-side { grid-template-columns: 1fr; }
+}
