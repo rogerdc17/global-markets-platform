@@ -124,3 +124,30 @@ The architecture is inspired by:
 - TauricResearch/TradingAgents — Apache-2.0
 
 This implementation is clean-room style rather than a wholesale copy. If upstream source code is incorporated later, preserve the applicable upstream license and notices.
+
+
+## Decision pipeline
+
+```text
+LiveMarket + historical data + web research
+                  |
+                  v
+      Specialist Analyst Team
+                  |
+                  v
+          Bull / Bear Debate
+                  |
+                  v
+             Trader Agent
+                  |
+                  v
+           Risk Committee
+                  |
+                  v
+         Portfolio Manager
+                  |
+                  v
+       Calibrated final report
+```
+
+The final confidence score is capped by a deterministic calibration layer based on data availability, research-source coverage, agent agreement and model confidence. This prevents the final model from presenting a high-confidence result when the underlying evidence is weak or conflicting.
