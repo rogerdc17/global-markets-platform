@@ -127,10 +127,10 @@ export default function Home() {
 
       <section className="hero" id="overview">
         <div className="hero-copy">
-          <p className="eyebrow">INDIA MARKET INTELLIGENCE</p>
-          <h1>Indian markets.<br />One clear view.</h1>
+          <p className="eyebrow">DP ALPHA · LIVE MARKET</p>
+          <h1>Real markets.<br />One trading terminal.</h1>
           <p className="hero-sub">
-            Follow NSE and BSE equities, major indices, market movers and sector activity from a clean, focused trading workspace.
+            Live Indian market data for Dharmin's trading workflow, built to feed both MyStocks and TradingAgent from the same market source.
           </p>
           <div className="hero-actions">
             <a className="primary-btn" href="#stocks">Explore markets</a>
@@ -298,7 +298,7 @@ export default function Home() {
       <section className="roadmap">
         <div>
           <p className="eyebrow">MVP ROADMAP</p>
-          <h2>Built to grow into a complete market platform.</h2>
+          <h2>Built around real market data, real positions and measurable decisions.</h2>
         </div>
         <div className="roadmap-grid">
           <article><span>01</span><strong>Live NSE/BSE data</strong><small>Licensed price feeds and index updates.</small></article>
@@ -309,7 +309,7 @@ export default function Home() {
       </section>
 
       <footer>
-        <strong>Bharat Markets</strong>
+        <strong>DP Alpha Terminal</strong>
         <span>LiveMarket uses a provider-neutral market-data layer. When no API gateway is configured, the interface falls back to clearly labelled demo values.</span>
       </footer>
     </main>
