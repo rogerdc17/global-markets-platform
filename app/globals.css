@@ -412,3 +412,88 @@ footer span { max-width: 760px; text-align: right; }
   border-color: rgba(31, 208, 138, .28);
   background: var(--green-bg);
 }
+
+
+.agent-workspace { max-width: 1420px; }
+.agent-hero { display:flex; justify-content:space-between; gap:30px; align-items:flex-start; }
+.agent-stack-badge { display:flex; flex-wrap:wrap; gap:7px; justify-content:flex-end; max-width:340px; }
+.agent-stack-badge span { border:1px solid var(--border); background:var(--surface); color:var(--muted); border-radius:99px; padding:7px 10px; font-size:9px; }
+.trading-agent-grid { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:18px; margin-top:8px; }
+.agent-control-card, .agent-method-card, .agent-thesis-card, .agent-risk-card, .agent-empty-state, .agent-view-card, .source-row {
+  border:1px solid var(--border); background:var(--surface); border-radius:13px;
+}
+.agent-control-card { overflow:hidden; }
+.panel-heading.compact { padding-bottom:12px; }
+.agent-form-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:0 24px 20px; }
+.agent-form-grid label { display:flex; flex-direction:column; gap:7px; color:var(--muted); font-size:9px; text-transform:uppercase; letter-spacing:.07em; }
+.agent-form-grid input, .agent-form-grid select { width:100%; height:40px; border:1px solid var(--border); background:var(--surface-3); color:var(--text); border-radius:8px; padding:0 10px; text-transform:none; letter-spacing:normal; outline:none; }
+.agent-run-meta { display:flex; justify-content:space-between; gap:12px; border-top:1px solid var(--border-soft); padding:13px 24px; color:var(--muted-2); font-size:9px; }
+.agent-run-button { border:0; margin:0 24px 20px; }
+.agent-run-button:disabled { opacity:.45; cursor:not-allowed; }
+.agent-warning, .agent-error { margin:0 24px 20px; font-size:10px; line-height:1.5; }
+.agent-warning { color:var(--accent); }
+.agent-error { color:var(--red); }
+.agent-method-card { padding:20px; }
+.agent-method-card h3 { margin:0 0 16px; font-size:16px; }
+.pipeline-list { display:flex; flex-direction:column; gap:0; border-top:1px solid var(--border-soft); }
+.pipeline-list span { padding:12px 0; border-bottom:1px solid var(--border-soft); color:var(--muted); font-size:10px; }
+.agent-empty-state { margin-top:18px; padding:24px; display:flex; gap:15px; align-items:flex-start; max-width:900px; }
+.agent-empty-state h2 { margin:0 0 7px; font-size:21px; letter-spacing:-.03em; }
+.agent-empty-state p { margin:0; color:var(--muted); font-size:11px; line-height:1.7; }
+.agent-results { margin-top:22px; }
+.agent-result-head { display:flex; justify-content:space-between; gap:20px; align-items:flex-end; padding:22px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.agent-result-head h2 { margin:0 0 5px; font-size:36px; letter-spacing:-.04em; }
+.agent-conviction { display:grid; grid-template-columns:auto auto; gap:2px 12px; align-items:end; text-align:right; }
+.agent-conviction span { font-size:11px; font-weight:850; text-transform:uppercase; }
+.agent-conviction strong { font-size:30px; letter-spacing:-.04em; }
+.agent-conviction small { grid-column:2; color:var(--muted-2); font-size:9px; }
+.agent-report-grid { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:18px; margin-top:18px; }
+.agent-thesis-card, .agent-risk-card { padding:22px; }
+.agent-thesis-card > p:not(.eyebrow) { color:var(--muted); line-height:1.75; font-size:12px; }
+.trade-plan-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:18px; }
+.trade-plan-grid div { border:1px solid var(--border-soft); background:var(--surface-3); border-radius:9px; padding:12px; display:flex; flex-direction:column; gap:5px; }
+.trade-plan-grid span, .agent-targets > span { color:var(--muted-2); font-size:8px; text-transform:uppercase; letter-spacing:.08em; }
+.trade-plan-grid strong { font-size:10px; }
+.agent-targets { display:flex; gap:8px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+.agent-targets strong { border:1px solid var(--border); border-radius:7px; padding:6px 8px; font-size:9px; }
+.portfolio-note { border-top:1px solid var(--border-soft); padding-top:14px; margin-top:16px !important; }
+.agent-kv { display:flex; justify-content:space-between; gap:12px; padding:11px 0; border-top:1px solid var(--border-soft); font-size:9px; }
+.agent-kv span { color:var(--muted); text-transform:capitalize; }
+.agent-kv strong { text-align:right; }
+.agent-section-head { margin:28px 0 12px; }
+.agent-section-head h3 { margin:0; font-size:18px; letter-spacing:-.025em; }
+.agent-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.agent-view-card { padding:17px; }
+.agent-view-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+.agent-view-top strong { font-size:11px; }
+.agent-view-top span { text-transform:uppercase; font-size:8px; font-weight:850; }
+.confidence-bar { height:4px; border-radius:99px; background:var(--border-soft); overflow:hidden; margin:13px 0 6px; }
+.confidence-bar span { display:block; height:100%; background:var(--accent); }
+.agent-view-card small { color:var(--muted-2); font-size:8px; }
+.agent-view-card p { color:var(--muted); font-size:10px; line-height:1.6; }
+.agent-view-card em { display:block; color:var(--muted-2); font-size:9px; line-height:1.5; font-style:normal; margin-top:5px; }
+.source-list { display:flex; flex-direction:column; gap:8px; }
+.source-row { display:grid; grid-template-columns:minmax(220px,.8fr) 1.2fr; gap:18px; padding:14px 16px; }
+.source-row:hover { border-color:#31475b; }
+.source-row div { display:flex; flex-direction:column; gap:4px; }
+.source-row strong { font-size:10px; }
+.source-row small { color:var(--muted-2); font-size:8px; }
+.source-row p { margin:0; color:var(--muted); font-size:9px; line-height:1.55; }
+.agent-caveats { margin-top:16px; border:1px solid rgba(245,185,66,.2); background:var(--accent-soft); border-radius:10px; padding:15px; display:flex; flex-direction:column; gap:6px; }
+.agent-caveats strong { font-size:10px; }
+.agent-caveats span { color:var(--muted); font-size:9px; line-height:1.5; }
+
+@media (max-width:1050px) {
+  .trading-agent-grid, .agent-report-grid { grid-template-columns:1fr; }
+  .agent-cards-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:760px) {
+  .agent-hero { flex-direction:column; }
+  .agent-stack-badge { justify-content:flex-start; }
+  .agent-form-grid { grid-template-columns:1fr; }
+  .agent-cards-grid { grid-template-columns:1fr; }
+  .trade-plan-grid { grid-template-columns:1fr; }
+  .source-row { grid-template-columns:1fr; }
+  .agent-result-head { align-items:flex-start; flex-direction:column; }
+  .agent-conviction { text-align:left; }
+}
