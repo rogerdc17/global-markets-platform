@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Header from "@/components/Header";
 import { notFound } from "next/navigation";
 import { stockMap, stockProfiles } from "@/lib/marketData";
 
@@ -63,22 +64,7 @@ export default async function StockDetail({
 
   return (
     <main className="detail-page">
-      <header className="nav-shell">
-        <Link className="brand" href="/" aria-label="Bharat Markets home">
-          <span className="brand-mark">BM</span>
-          <span>Bharat Markets</span>
-        </Link>
-        <nav className="desktop-nav" aria-label="Primary">
-          <Link href="/">LiveMarket</Link>
-          <Link href="/my-stocks">MyStocks</Link>
-          <Link href="/trading-agent">TradingAgent</Link>
-          <Link className="active" href="/#stocks">Stocks</Link>
-        </nav>
-        <div className="session-pill">
-          <span className="pulse" />
-          Concept data
-        </div>
-      </header>
+      <Header active="live" status="Market preview" />
 
       <section className="stock-detail-shell">
         <div className="stock-breadcrumb">
