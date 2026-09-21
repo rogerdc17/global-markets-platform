@@ -69,10 +69,10 @@ export default async function StockDetail({
           <span>Bharat Markets</span>
         </Link>
         <nav className="desktop-nav" aria-label="Primary">
-          <Link href="/">Overview</Link>
+          <Link href="/">LiveMarket</Link>
+          <Link href="/my-stocks">MyStocks</Link>
+          <Link href="/trading-agent">TradingAgent</Link>
           <Link className="active" href="/#stocks">Stocks</Link>
-          <Link href="/#movers">Movers</Link>
-          <Link href="/#indices">Indices</Link>
         </nav>
         <div className="session-pill">
           <span className="pulse" />
