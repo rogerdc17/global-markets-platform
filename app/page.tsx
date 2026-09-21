@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import Header from "@/components/Header";
 
 type Stock = {
   symbol: string;
@@ -69,25 +70,7 @@ export default function Home() {
 
   return (
     <main>
-      <header className="nav-shell">
-        <a className="brand" href="#" aria-label="Bharat Markets home">
-          <span className="brand-mark">BM</span>
-          <span>Bharat Markets</span>
-        </a>
-
-        <nav className="desktop-nav" aria-label="Primary">
-          <Link className="active" href="/">LiveMarket</Link>
-          <Link href="/my-stocks">MyStocks</Link>
-          <Link href="/trading-agent">TradingAgent</Link>
-          <a href="#indices">Indices</a>
-          <a href="#about">About</a>
-        </nav>
-
-        <div className="session-pill">
-          <span className="pulse" />
-          NSE session
-        </div>
-      </header>
+      <Header active="live" status="Market preview" />
 
       <section className="index-strip" id="indices" aria-label="Major Indian indices">
         <div className="index-strip-inner">
@@ -265,7 +248,7 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="roadmap" id="about">
+      <section className="roadmap">
         <div>
           <p className="eyebrow">MVP ROADMAP</p>
           <h2>Built to grow into a complete market platform.</h2>
