@@ -5,12 +5,12 @@ type HeaderProps = {
   status?: string;
 };
 
-export default function Header({ active, status = "Concept mode" }: HeaderProps) {
+export default function Header({ active, status = "Private terminal" }: HeaderProps) {
   return (
     <header className="nav-shell">
-      <Link className="brand" href="/" aria-label="Bharat Markets home">
-        <span className="brand-mark">BM</span>
-        <span>Bharat Markets</span>
+      <Link className="brand" href="/" aria-label="DP Alpha Terminal home">
+        <span className="brand-mark">DP</span>
+        <span>DP Alpha <small className="brand-terminal">Terminal</small></span>
       </Link>
 
       <nav className="desktop-nav" aria-label="Primary">
