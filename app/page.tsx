@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
+import { fetchMarketSnapshot } from "@/lib/marketProvider";
 
 type Stock = {
   symbol: string;
@@ -48,12 +49,52 @@ export default function Home() {
   const [exchange, setExchange] = useState("All");
   const [sector, setSector] = useState("All sectors");
   const [query, setQuery] = useState("");
+  const [marketStocks, setMarketStocks] = useState<Stock[]>(stocks);
+  const [marketIndices, setMarketIndices] = useState(indexCards);
+  const [dataMode, setDataMode] = useState<"live" | "delayed" | "demo">("demo");
+  const [providerName, setProviderName] = useState("Demo fallback");
+  const [asOf, setAsOf] = useState("");
 
-  const sectors = ["All sectors", ...Array.from(new Set(stocks.map((s) => s.sector)))];
+  useEffect(() => {
+    let active = true;
+
+    async function loadMarket() {
+      const snapshot = await fetchMarketSnapshot();
+      if (!active || !snapshot) return;
+
+      if (snapshot.stocks?.length) {
+        setMarketStocks(snapshot.stocks);
+      }
+
+      if (snapshot.indices?.length) {
+        setMarketIndices(
+          snapshot.indices.map((item) => ({
+            name: item.name,
+            value: item.value.toLocaleString("en-IN", { maximumFractionDigits: 2 }),
+            change: `${item.changePct >= 0 ? "+" : ""}${item.changePct.toFixed(2)}%`,
+            positive: item.changePct >= 0,
+          }))
+        );
+      }
+
+      setDataMode(snapshot.mode);
+      setProviderName(snapshot.provider);
+      setAsOf(snapshot.asOf);
+    }
+
+    loadMarket();
+    const timer = window.setInterval(loadMarket, 10000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const sectors = ["All sectors", ...Array.from(new Set(marketStocks.map((s) => s.sector)))];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return stocks.filter((stock) => {
+    return marketStocks.filter((stock) => {
       const exchangeMatch = exchange === "All" || stock.exchange === exchange;
       const sectorMatch = sector === "All sectors" || stock.sector === sector;
       const queryMatch =
@@ -63,18 +104,18 @@ export default function Home() {
         stock.sector.toLowerCase().includes(q);
       return exchangeMatch && sectorMatch && queryMatch;
     });
-  }, [exchange, sector, query]);
+  }, [exchange, sector, query, marketStocks]);
 
-  const gainers = [...stocks].sort((a, b) => b.changePct - a.changePct).slice(0, 4);
-  const losers = [...stocks].sort((a, b) => a.changePct - b.changePct).slice(0, 4);
+  const gainers = [...marketStocks].sort((a, b) => b.changePct - a.changePct).slice(0, 4);
+  const losers = [...marketStocks].sort((a, b) => a.changePct - b.changePct).slice(0, 4);
 
   return (
     <main>
-      <Header active="live" status="Market preview" />
+      <Header active="live" status={dataMode === "live" ? `Live · ${providerName}` : dataMode === "delayed" ? `Delayed · ${providerName}` : "Demo fallback"} />
 
       <section className="index-strip" id="indices" aria-label="Major Indian indices">
         <div className="index-strip-inner">
-          {indexCards.map((index) => (
+          {marketIndices.map((index) => (
             <article className="index-mini" key={index.name}>
               <span>{index.name}</span>
               <strong>{index.value}</strong>
@@ -93,7 +134,11 @@ export default function Home() {
           </p>
           <div className="hero-actions">
             <a className="primary-btn" href="#stocks">Explore markets</a>
-            <span className="demo-note">MVP interface · live feed coming next</span>
+            <span className="demo-note">
+  {dataMode === "live"
+    ? `Live via ${providerName}${asOf ? ` · updated ${new Date(asOf).toLocaleTimeString()}` : ""}`
+    : "Provider-ready · connect API gateway to enable real data"}
+</span>
           </div>
         </div>
 
@@ -125,7 +170,9 @@ export default function Home() {
               <p className="eyebrow">MARKET WATCH</p>
               <h2>Indian equities</h2>
             </div>
-            <span className="preview-tag">Preview data</span>
+            <span className={`preview-tag ${dataMode === "live" ? "live-source" : ""}`}>
+  {dataMode === "live" ? "Live API" : dataMode === "delayed" ? "Delayed API" : "Demo fallback"}
+</span>
           </div>
 
           <div className="filters">
@@ -263,7 +310,7 @@ export default function Home() {
 
       <footer>
         <strong>Bharat Markets</strong>
-        <span>First interface build. Prices and market status shown here are sample values until a licensed live market-data feed is connected.</span>
+        <span>LiveMarket uses a provider-neutral market-data layer. When no API gateway is configured, the interface falls back to clearly labelled demo values.</span>
       </footer>
     </main>
   );
