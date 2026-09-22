@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     market_api_base_url: str = ""
     allowed_origins: str = "https://rogerdc17.github.io,http://localhost:3000"
 
-    # Temporary role-based users. Legacy DP_LOGIN_* remains an internal fallback.
+    # Temporary role-based users. These remain server-side only.
     dp_internal_username: str = ""
     dp_internal_password: str = ""
     dp_client_username: str = ""
@@ -14,12 +14,19 @@ class Settings(BaseSettings):
     dp_client_id: str = "client-001"
     dp_client_name: str = "DP Alpha Client"
 
+    # Legacy internal login fallback.
     dp_login_username: str = ""
     dp_login_password: str = ""
 
     dp_auth_secret: str = ""
     dp_auth_hours: int = 12
-    dp_data_file: str = "./data/client_portfolios.json"
+
+    # Portable self-hosted runtime.
+    dp_database_file: str = "./data/dp_alpha.db"
+    dp_legacy_data_file: str = "./data/client_portfolios.json"
+    dp_backup_dir: str = "./backups"
+    dp_bind_host: str = "127.0.0.1"
+    dp_port: int = 8000
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
