@@ -101,3 +101,37 @@ export async function recordClientTrade(payload: {
     body: JSON.stringify(payload),
   });
 }
+
+
+export type ResearchNote = {
+  id: string;
+  symbol: string;
+  title: string;
+  thesis: string;
+  status: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function listResearchNotes() {
+  return api<{ notes: ResearchNote[] }>("/research");
+}
+
+export async function createResearchNote(payload: {
+  symbol: string;
+  title: string;
+  thesis: string;
+  status: string;
+}) {
+  return api<ResearchNote>("/research", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function createServerBackup() {
+  return api<{ ok: boolean; backup: string }>("/admin/backup", {
+    method: "POST",
+  });
+}
