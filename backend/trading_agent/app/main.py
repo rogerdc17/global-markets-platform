@@ -1,3 +1,4 @@
+import asyncio
 from typing import Literal
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -47,9 +48,22 @@ class TradeRecordRequest(BaseModel):
     note: str = Field(default="", max_length=2000)
     research_run_id: str | None = None
 
+async def backup_loop():
+    while True:
+        await asyncio.sleep(max(settings.dp_backup_hours, 1) * 3600)
+        try:
+            backup_database()
+        except Exception:
+            pass
+
 @app.on_event("startup")
 async def startup():
     init_db()
+    try:
+        backup_database()
+    except Exception:
+        pass
+    asyncio.create_task(backup_loop())
 
 @app.get("/health")
 async def health():
