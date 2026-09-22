@@ -1648,3 +1648,120 @@ tbody tr {
     background: #fff !important;
   }
 }
+
+
+/* ===== Portal reliability polish ===== */
+.portal-loading {
+  margin: -4px 0 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 9px;
+  background: rgba(255,255,255,.015);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.role-nav {
+  min-width: 0;
+  scrollbar-width: thin;
+}
+
+.role-nav a {
+  white-space: nowrap;
+}
+
+.record-toolbar select:disabled,
+.position-form input:disabled,
+.position-form select:disabled,
+.position-form textarea:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.table-wrap {
+  scrollbar-width: thin;
+}
+
+.table-wrap table {
+  min-width: 680px;
+}
+
+.auth-session-bar {
+  position: relative;
+  z-index: 20;
+}
+
+.auth-session-bar button {
+  cursor: pointer;
+}
+
+.auth-session-bar button:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1050px) {
+  .nav-shell {
+    row-gap: 10px;
+  }
+
+  .role-nav {
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-bottom: 4px;
+  }
+
+  .role-nav::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  .session-pill {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .auth-session-bar {
+    min-height: 34px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 12px;
+  }
+
+  .auth-session-bar button {
+    margin-left: auto;
+  }
+
+  .record-layout,
+  .client-dashboard-grid {
+    gap: 14px;
+  }
+
+  .record-side {
+    gap: 14px;
+  }
+
+  .stocks-panel,
+  .side-card,
+  .performance-panel,
+  .report-card,
+  .research-note-card {
+    border-radius: 11px;
+  }
+}
+
+@media (max-width: 420px) {
+  .auth-session-bar {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .role-badge {
+    font-size: 7px;
+  }
+
+  .record-mode {
+    max-width: 100%;
+    line-height: 1.35;
+  }
+}
