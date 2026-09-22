@@ -6,10 +6,20 @@ class Settings(BaseSettings):
     market_api_base_url: str = ""
     allowed_origins: str = "https://rogerdc17.github.io,http://localhost:3000"
 
+    # Temporary role-based users. Legacy DP_LOGIN_* remains an internal fallback.
+    dp_internal_username: str = ""
+    dp_internal_password: str = ""
+    dp_client_username: str = ""
+    dp_client_password: str = ""
+    dp_client_id: str = "client-001"
+    dp_client_name: str = "DP Alpha Client"
+
     dp_login_username: str = ""
     dp_login_password: str = ""
+
     dp_auth_secret: str = ""
     dp_auth_hours: int = 12
+    dp_data_file: str = "./data/client_portfolios.json"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -18,7 +28,17 @@ class Settings(BaseSettings):
         return [item.strip() for item in self.allowed_origins.split(",") if item.strip()]
 
     @property
+    def internal_username(self) -> str:
+        return self.dp_internal_username or self.dp_login_username
+
+    @property
+    def internal_password(self) -> str:
+        return self.dp_internal_password or self.dp_login_password
+
+    @property
     def auth_configured(self) -> bool:
-        return bool(self.dp_login_username and self.dp_login_password and self.dp_auth_secret)
+        internal_ok = bool(self.internal_username and self.internal_password)
+        client_ok = bool(self.dp_client_username and self.dp_client_password)
+        return bool(self.dp_auth_secret and (internal_ok or client_ok))
 
 settings = Settings()
