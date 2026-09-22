@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.auth import LoginRequest, LoginResponse, UserContext, authenticate, require_internal, require_user
-from app.client_store import add_client, add_research_note, add_trade, get_client, list_clients, list_research_notes, list_trades, portfolio_summary
+from app.client_store import add_client, add_research_note, add_trade, available_quantity, get_client, list_clients, list_research_notes, list_trades, portfolio_summary
 from app.config import settings
 from app.database import backup_database, init_db
 from app.models import AnalyzeRequest, AnalyzeResponse
@@ -133,6 +133,15 @@ async def record_trade(request: TradeRecordRequest, user: UserContext = Depends(
     require_internal(user)
     if not get_client(request.client_id):
         raise HTTPException(status_code=404, detail="Client not found.")
+
+    if request.side == "SELL":
+        held = available_quantity(request.client_id, request.symbol)
+        if request.quantity > held + 1e-9:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Cannot record SELL of {request.quantity:g} {request.symbol.upper()}; recorded holding is {held:g}.",
+            )
+
     trade = add_trade(
         client_id=request.client_id,
         symbol=request.symbol,
@@ -181,4 +190,7 @@ async def agent_analyze(
     except HTTPException:
         raise
     except Exception as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=502,
+            detail="TradingAgent analysis failed. Check the server logs and provider configuration.",
+        ) from exc
