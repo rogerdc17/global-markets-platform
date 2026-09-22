@@ -1,153 +1,94 @@
-# TradingAgent backend
+# DP Alpha backend
 
-Private-ready FastAPI backend for the Bharat Markets TradingAgent.
+Self-hosted FastAPI backend for DP Alpha.
 
-## Architecture
+## Responsibilities
 
-The backend intentionally separates:
+- authentication and role checks
+- client portfolio records
+- research records
+- SQLite persistence
+- audit history
+- rolling database backups
+- optional TradingAgent integration
+- optional market-data integration
 
-1. deterministic calculations — technical indicators, exposure and risk sizing,
-2. provider-neutral market context — through the same LiveMarket market gateway,
-3. current web research — through Claude web search,
-4. multi-agent reasoning — technical, fundamental, news, bull, bear, risk and portfolio views,
-5. final synthesis — a structured report for a human trader.
+There is no order-execution endpoint.
 
-Claude does not place orders.
+## Windows
 
-## Local setup
+From the repository root:
 
-~~~bash
-cd backend/trading_agent
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-~~~
+```text
+setup-dp-alpha-windows.bat
+start-dp-alpha-windows.bat
+```
 
-Set:
+## macOS / Linux
 
-~~~text
-ANTHROPIC_API_KEY=your-private-key
-CLAUDE_MODEL=claude-sonnet-5
-MARKET_API_BASE_URL=https://your-market-gateway.example.com
-ALLOWED_ORIGINS=https://rogerdc17.github.io,http://localhost:3000
-~~~
+From `backend/trading_agent`:
+
+```bash
+chmod +x setup-unix.sh start-unix.sh
+./setup-unix.sh
+./start-unix.sh
+```
+
+## Health check
+
+```text
+GET http://127.0.0.1:8000/health
+```
+
+A healthy self-hosted server reports:
+
+```json
+{
+  "ok": true,
+  "executionEnabled": false,
+  "storage": "sqlite",
+  "selfHosted": true
+}
+```
+
+## Local files
+
+Private configuration:
+
+```text
+.env
+```
+
+Database:
+
+```text
+data/dp_alpha.db
+```
+
+Backups:
+
+```text
+backups/
+```
+
+All are excluded from Git.
+
+## Diagnostics
 
 Run:
 
-~~~bash
-uvicorn app.main:app --reload --port 8000
-~~~
-
-Health check:
-
-~~~text
-GET /health
-~~~
-
-Main analysis endpoint:
-
-~~~text
-POST /agent/analyze
-~~~
-
-Example body:
-
-~~~json
-{
-  "symbol": "RELIANCE",
-  "horizon": "swing",
-  "mode": "committee",
-  "account_size": 1000000,
-  "max_risk_pct": 1,
-  "stop_price": 1380,
-  "portfolio": [
-    {
-      "symbol": "RELIANCE",
-      "side": "BUY",
-      "quantity": 25,
-      "entry_price": 1315,
-      "current_price": 1423
-    }
-  ]
-}
-~~~
-
-## Deployment
-
-Run the backend on a private/container host such as Cloud Run, ECS/Fargate, Railway, Render, Fly.io or a private VPS.
-
-Keep these secrets server-side only:
-
-~~~text
-ANTHROPIC_API_KEY
-broker credentials
-paid NSE/vendor credentials
-database credentials
-~~~
-
-After deployment, set this GitHub repository variable:
-
-~~~text
-TRADING_AGENT_API_BASE_URL=https://your-agent-api.example.com
-~~~
-
-The Pages build exposes only that public API base URL to the browser.
-
-## Research policy
-
-The research prompt prioritizes:
-
-- exchange, regulatory and company filings,
-- investor-relations documents,
-- current financial reporting,
-- sector and macro evidence.
-
-Every completed analysis returns a source list so the UI can show what evidence was used.
-
-## Next production layers
-
-- authentication and user isolation
-- PostgreSQL run history and outcome tracking
-- scheduled market scanners and alerts
-- historical candle endpoint in the market gateway
-- dedicated fundamentals adapter
-- backtesting service
-- per-user risk rules
-- broker integration only behind explicit human confirmation
-
-## Inspiration and licensing
-
-The architecture is inspired by:
-
-- HKUDS/Vibe-Trading — MIT
-- TauricResearch/TradingAgents — Apache-2.0
-
-This implementation is clean-room style rather than a wholesale copy. If upstream source code is incorporated later, preserve the applicable upstream license and notices.
-
-
-## Decision pipeline
-
-```text
-LiveMarket + historical data + web research
-                  |
-                  v
-      Specialist Analyst Team
-                  |
-                  v
-          Bull / Bear Debate
-                  |
-                  v
-             Trader Agent
-                  |
-                  v
-           Risk Committee
-                  |
-                  v
-         Portfolio Manager
-                  |
-                  v
-       Calibrated final report
+```bash
+python doctor.py
 ```
 
-The final confidence score is capped by a deterministic calibration layer based on data availability, research-source coverage, agent agreement and model confidence. This prevents the final model from presenting a high-confidence result when the underlying evidence is weak or conflicting.
+The configuration doctor checks required login settings and warns when optional Claude or market integrations are not configured.
+
+## Backup
+
+```bash
+python backup.py
+```
+
+The backend also creates rolling automatic backups.
+
+For remote-access setup and moving the server to another computer, see `SELF_HOSTING.md`.
