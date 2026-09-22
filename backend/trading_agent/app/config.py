@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     dp_database_file: str = "./data/dp_alpha.db"
     dp_legacy_data_file: str = "./data/client_portfolios.json"
     dp_backup_dir: str = "./backups"
+    dp_backup_hours: int = 24
     dp_bind_host: str = "127.0.0.1"
     dp_port: int = 8000
 
