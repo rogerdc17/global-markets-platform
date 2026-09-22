@@ -1765,3 +1765,114 @@ tbody tr {
     line-height: 1.35;
   }
 }
+
+
+/* ===== TradingAgent research memory ===== */
+.agent-history-card {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.compact-history-head {
+  margin: 0;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.agent-history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-history-row {
+  display: grid;
+  grid-template-columns: 110px 90px minmax(150px, 1fr) 70px 180px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 20px;
+  border: 0;
+  border-bottom: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+}
+
+.agent-history-row:last-child {
+  border-bottom: 0;
+}
+
+.agent-history-row:hover,
+.agent-history-row:focus-visible {
+  background: rgba(255,255,255,.025);
+  outline: none;
+}
+
+.agent-history-symbol {
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.agent-history-row > span:nth-child(3) {
+  text-transform: capitalize;
+}
+
+.agent-history-row strong {
+  color: var(--accent);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-history-row small {
+  color: var(--muted-2);
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .agent-history-row {
+    grid-template-columns: 90px 70px minmax(120px, 1fr) 55px;
+  }
+
+  .agent-history-row small {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .agent-history-list {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .agent-history-row {
+    grid-template-columns: 1fr auto;
+    gap: 5px 10px;
+    padding: 12px;
+    border: 1px solid var(--border-soft);
+    border-radius: 9px;
+  }
+
+  .agent-history-row > span:nth-child(2),
+  .agent-history-row > span:nth-child(3) {
+    grid-column: 1;
+  }
+
+  .agent-history-row strong {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .agent-history-row small {
+    grid-column: 1 / -1;
+  }
+}
