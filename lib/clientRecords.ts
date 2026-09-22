@@ -39,14 +39,19 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const base = apiBase();
   if (!base) throw new Error("Private backend is not configured.");
 
-  const response = await fetch(`${base}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAuthToken()}`,
-      ...(init?.headers || {}),
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${base}${path}`, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+        ...(init?.headers || {}),
+      },
+    });
+  } catch {
+    throw new Error("DP Alpha server is unreachable. Check that the server computer and secure tunnel are running.");
+  }
 
   if (response.status === 401) {
     logout();
