@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.auth import LoginRequest, LoginResponse, UserContext, authenticate, require_internal, require_user
+from app.agent_store import get_agent_run, list_agent_runs, run_exists, save_agent_run
 from app.client_store import add_client, add_research_note, add_trade, available_quantity, get_client, list_clients, list_research_notes, list_trades, portfolio_summary
 from app.config import settings
 from app.database import backup_database, init_db
@@ -142,6 +143,9 @@ async def record_trade(request: TradeRecordRequest, user: UserContext = Depends(
                 detail=f"Cannot record SELL of {request.quantity:g} {request.symbol.upper()}; recorded holding is {held:g}.",
             )
 
+    if request.research_run_id and not run_exists(request.research_run_id):
+        raise HTTPException(status_code=400, detail="Research run ID does not exist.")
+
     trade = add_trade(
         client_id=request.client_id,
         symbol=request.symbol,
@@ -179,6 +183,26 @@ async def create_backup(user: UserContext = Depends(require_user)):
     path = backup_database()
     return {"ok": True, "backup": path.name}
 
+@app.get("/agent/runs")
+async def agent_runs(
+    limit: int = 25,
+    symbol: str | None = None,
+    user: UserContext = Depends(require_user),
+):
+    require_internal(user)
+    return {"runs": list_agent_runs(limit=limit, symbol=symbol)}
+
+@app.get("/agent/runs/{run_id}")
+async def agent_run(
+    run_id: str,
+    user: UserContext = Depends(require_user),
+):
+    require_internal(user)
+    item = get_agent_run(run_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Research run not found.")
+    return item
+
 @app.post("/agent/analyze", response_model=AnalyzeResponse)
 async def agent_analyze(
     request: AnalyzeRequest,
@@ -186,7 +210,9 @@ async def agent_analyze(
 ):
     require_internal(user)
     try:
-        return await analyze(request)
+        result = await analyze(request)
+        save_agent_run(request, result, created_by=user.username)
+        return result
     except HTTPException:
         raise
     except Exception as exc:
