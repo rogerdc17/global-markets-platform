@@ -9,9 +9,13 @@ const money = (value: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(value);
 
 export default function PerformancePage() {
-  const role = getSession()?.role || "internal";
+  const [role, setRole] = useState<"internal" | "client" | null>(null);
   const [data, setData] = useState<PortfolioPayload | null>(null);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setRole(getSession()?.role || "internal");
+  }, []);
 
   useEffect(() => {
     if (role !== "client") return;
@@ -28,6 +32,15 @@ export default function PerformancePage() {
         return { date: new Date(t.executed_at).toLocaleDateString(), value: cumulative };
       });
   }, [data]);
+
+  if (!role) {
+    return (
+      <main>
+        <Header active="performance" status="Loading analytics" />
+        <section className="workspace-shell"><div className="empty-state">Loading performance workspace…</div></section>
+      </main>
+    );
+  }
 
   if (role === "internal") {
     return (
