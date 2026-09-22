@@ -3,25 +3,24 @@ setlocal
 cd /d "%~dp0"
 
 if not exist ".venv\Scripts\python.exe" (
-  echo Creating Python virtual environment...
-  py -m venv .venv
-  if errorlevel 1 python -m venv .venv
+  echo DP Alpha is not installed on this computer yet.
+  echo Run setup-windows.bat first.
+  pause
+  exit /b 1
 )
 
 call .venv\Scripts\activate.bat
 
-echo Installing/updating backend dependencies...
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-
-if not exist ".env" (
-  copy ".env.example" ".env" >nul
+python doctor.py
+if errorlevel 1 (
   echo.
-  echo Created .env from .env.example.
-  echo Edit backend\trading_agent\.env before using DP Alpha.
-  echo.
+  echo Fix the configuration errors above, then run this file again.
   pause
+  exit /b 1
 )
 
+echo.
 echo Starting DP Alpha on http://127.0.0.1:8000
+echo Press Ctrl+C to stop the server.
+echo.
 python run_server.py
