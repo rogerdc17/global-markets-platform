@@ -6,3 +6,6 @@ out/
 .DS_Store
 *.log
 *.tsbuildinfo
+
+# Temporary backend runtime records
+backend/trading_agent/data/client_portfolios.json
