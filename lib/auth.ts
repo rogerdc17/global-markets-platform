@@ -51,11 +51,16 @@ export function logout() {
 export async function login(username: string, password: string): Promise<Session> {
   if (!API_BASE) throw new Error("Private backend is not configured.");
 
-  const response = await fetch(`${API_BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+  } catch {
+    throw new Error("DP Alpha server is unreachable. Make sure the server computer is running.");
+  }
 
   if (!response.ok) {
     let message = "Login failed.";
