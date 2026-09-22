@@ -14,12 +14,12 @@ export function authConfigured() {
 export function getSession(): Session | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(TOKEN_KEY);
+    const raw = window.sessionStorage.getItem(TOKEN_KEY);
     if (!raw) return null;
     const session = JSON.parse(raw) as Session;
     if (!session.token || !session.expires_at) return null;
     if (new Date(session.expires_at).getTime() <= Date.now()) {
-      window.localStorage.removeItem(TOKEN_KEY);
+      window.sessionStorage.removeItem(TOKEN_KEY);
       return null;
     }
     return session;
@@ -34,7 +34,7 @@ export function getAuthToken() {
 
 export function logout() {
   if (typeof window !== "undefined") {
-    window.localStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.removeItem(TOKEN_KEY);
     window.dispatchEvent(new Event("dp-alpha-auth-changed"));
   }
 }
@@ -58,7 +58,7 @@ export async function login(username: string, password: string): Promise<Session
   }
 
   const session = (await response.json()) as Session;
-  window.localStorage.setItem(TOKEN_KEY, JSON.stringify(session));
+  window.sessionStorage.setItem(TOKEN_KEY, JSON.stringify(session));
   window.dispatchEvent(new Event("dp-alpha-auth-changed"));
   return session;
 }
