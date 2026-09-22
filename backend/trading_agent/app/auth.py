@@ -1,4 +1,6 @@
 import hmac
+import time
+from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -7,6 +9,9 @@ from pydantic import BaseModel
 
 from app.config import settings
 
+_attempts: dict[str, list[float]] = defaultdict(list)
+WINDOW_SECONDS = 300
+MAX_ATTEMPTS = 5
 
 class LoginRequest(BaseModel):
     username: str
@@ -27,12 +32,21 @@ def _require_auth_configured() -> None:
 def authenticate(username: str, password: str) -> LoginResponse:
     _require_auth_configured()
 
+    now_ts = time.time()
+    key = username.strip().lower() or "anonymous"
+    recent = [ts for ts in _attempts[key] if now_ts - ts < WINDOW_SECONDS]
+    _attempts[key] = recent
+    if len(recent) >= MAX_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many login attempts. Try again in a few minutes.")
+
     valid_user = hmac.compare_digest(username, settings.dp_login_username)
     valid_password = hmac.compare_digest(password, settings.dp_login_password)
 
     if not (valid_user and valid_password):
+        _attempts[key].append(now_ts)
         raise HTTPException(status_code=401, detail="Invalid username or password.")
 
+    _attempts.pop(key, None)
     now = datetime.now(timezone.utc)
     expires = now + timedelta(hours=settings.dp_auth_hours)
 
