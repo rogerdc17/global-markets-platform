@@ -1,14 +1,23 @@
 const API_BASE = process.env.NEXT_PUBLIC_TRADING_AGENT_API_BASE_URL?.replace(/\/$/, "");
 const TOKEN_KEY = "dp-alpha-session";
 
+export type UserRole = "internal" | "client";
+
 export type Session = {
   token: string;
   expires_at: string;
   username: string;
+  role: UserRole;
+  client_id?: string | null;
+  display_name?: string | null;
 };
 
 export function authConfigured() {
   return Boolean(API_BASE);
+}
+
+export function apiBase() {
+  return API_BASE || "";
 }
 
 export function getSession(): Session | null {
@@ -17,7 +26,7 @@ export function getSession(): Session | null {
     const raw = window.sessionStorage.getItem(TOKEN_KEY);
     if (!raw) return null;
     const session = JSON.parse(raw) as Session;
-    if (!session.token || !session.expires_at) return null;
+    if (!session.token || !session.expires_at || !session.role) return null;
     if (new Date(session.expires_at).getTime() <= Date.now()) {
       window.sessionStorage.removeItem(TOKEN_KEY);
       return null;
