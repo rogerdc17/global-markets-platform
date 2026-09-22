@@ -99,6 +99,19 @@ def list_trades(client_id: str | None = None) -> list[RecordedTrade]:
     return [RecordedTrade(**dict(row)) for row in rows]
 
 
+def available_quantity(client_id: str, symbol: str) -> float:
+    target = symbol.strip().upper()
+    quantity = 0.0
+    for trade in list_trades(client_id):
+        if trade.symbol != target:
+            continue
+        if trade.side == "BUY":
+            quantity += trade.quantity
+        elif trade.side == "SELL":
+            quantity -= trade.quantity
+    return max(0.0, quantity)
+
+
 def add_trade(
     client_id: str,
     symbol: str,
