@@ -20,6 +20,7 @@ export default function ClientPortfoliosPage() {
   const [portfolio, setPortfolio] = useState<PortfolioPayload | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [clientName, setClientName] = useState("");
   const [clientNotes, setClientNotes] = useState("");
@@ -35,22 +36,29 @@ export default function ClientPortfoliosPage() {
   const [researchRunId, setResearchRunId] = useState("");
 
   async function refreshClients(preferred?: string) {
+    setLoading(true);
     const data = await listClients();
     setClients(data.clients);
     const next = preferred || selected || data.clients[0]?.id || "";
     setSelected(next);
     if (next) setPortfolio(await getClientPortfolio(next));
+    else setPortfolio(null);
+    setLoading(false);
   }
 
   useEffect(() => {
-    refreshClients().catch((e) => setError(e instanceof Error ? e.message : "Could not load clients."));
+    refreshClients().catch((e) => {
+      setError(e instanceof Error ? e.message : "Could not load clients.");
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
     if (!selected) return;
+    setLoading(true);
     getClientPortfolio(selected)
-      .then(setPortfolio)
-      .catch((e) => setError(e instanceof Error ? e.message : "Could not load portfolio."));
+      .then((data) => { setPortfolio(data); setLoading(false); })
+      .catch((e) => { setError(e instanceof Error ? e.message : "Could not load portfolio."); setLoading(false); });
   }, [selected]);
 
   async function addNewClient(e: FormEvent) {
@@ -68,7 +76,7 @@ export default function ClientPortfoliosPage() {
 
   async function recordTrade(e: FormEvent) {
     e.preventDefault();
-    if (!selected) return;
+    if (!selected || !symbol.trim() || Number(quantity) <= 0 || Number(price) <= 0) return;
     setBusy(true); setError("");
     try {
       await recordClientTrade({
@@ -103,11 +111,12 @@ export default function ClientPortfoliosPage() {
         </p>
 
         {error && <div className="agent-error record-error">{error}</div>}
+        {loading && <div className="portal-loading">Refreshing shared portfolio records…</div>}
 
         <div className="record-toolbar">
           <label>
             Active client
-            <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+            <select value={selected} onChange={(e) => { setError(""); setSelected(e.target.value); }} disabled={loading && clients.length === 0}>
               {clients.map((c) => <option value={c.id} key={c.id}>{c.name}</option>)}
             </select>
           </label>
