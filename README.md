@@ -1,6 +1,6 @@
 # DP Alpha Terminal
 
-Private trading intelligence platform for Dharmin Patel and his trading partner.
+Private research, portfolio record-keeping and reporting platform. DP Alpha does not execute trades.
 
 ## Core product
 
@@ -178,3 +178,40 @@ Never commit:
 - database passwords
 
 DP Alpha Terminal is a decision-support system. It does not guarantee profitable outcomes and should preserve human confirmation for any future order execution.
+
+
+## Role-based portals
+
+DP Alpha now has two temporary roles:
+
+### Internal
+- LiveMarket
+- MyStocks
+- Client Portfolios
+- TradingAgent
+- Research
+- Performance
+- About
+
+Internal users can record transactions that were executed outside DP Alpha. These records feed the client portal.
+
+### Client
+- Dashboard
+- LiveMarket
+- MyPortfolio
+- Performance
+- Transactions
+- Reports
+- About
+
+Client access is read-only and scoped to the client ID embedded in the authenticated session.
+
+## Important execution boundary
+
+DP Alpha is intentionally not a brokerage or order-entry application.
+
+It does not place, route, modify, cancel, or execute securities orders. BUY and SELL values stored in the application describe transactions that have already occurred externally.
+
+## Temporary storage
+
+Client records currently use the backend JSON file configured by `DP_DATA_FILE`. This is suitable only for the current development phase. Production should replace it with authenticated PostgreSQL storage, audit logs and durable backups.
