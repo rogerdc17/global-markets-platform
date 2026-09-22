@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
+import { AgentRunSummary, listAgentRuns } from "@/lib/tradingAgent";
 import {
   ClientRecord,
   PortfolioPayload,
@@ -34,6 +35,7 @@ export default function ClientPortfoliosPage() {
   const [strategy, setStrategy] = useState("");
   const [note, setNote] = useState("");
   const [researchRunId, setResearchRunId] = useState("");
+  const [researchRuns, setResearchRuns] = useState<AgentRunSummary[]>([]);
 
   async function refreshClients(preferred?: string) {
     setLoading(true);
@@ -47,6 +49,7 @@ export default function ClientPortfoliosPage() {
   }
 
   useEffect(() => {
+    listAgentRuns(50).then(setResearchRuns).catch(() => {});
     refreshClients().catch((e) => {
       setError(e instanceof Error ? e.message : "Could not load clients.");
       setLoading(false);
@@ -191,7 +194,17 @@ export default function ClientPortfoliosPage() {
               <label>Fees<input type="number" min="0" step="any" value={fees} onChange={(e) => setFees(e.target.value)} /></label>
               <label>Executed at<input required type="datetime-local" value={executedAt} onChange={(e) => setExecutedAt(e.target.value)} /></label>
               <label>Strategy<input value={strategy} onChange={(e) => setStrategy(e.target.value)} placeholder="Swing / Investment" /></label>
-              <label>Research run ID<input value={researchRunId} onChange={(e) => setResearchRunId(e.target.value)} placeholder="Optional" /></label>
+              <label>
+                Linked research run
+                <select value={researchRunId} onChange={(e) => setResearchRunId(e.target.value)}>
+                  <option value="">None</option>
+                  {researchRuns.map((run) => (
+                    <option value={run.run_id} key={run.run_id}>
+                      {run.symbol} · {run.horizon} · {run.run_id.slice(0, 8)} · {typeof run.confidence === "number" ? `${run.confidence}%` : "—"}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <label>Internal note<textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Why this external transaction was recorded" /></label>
               <button className="primary-btn position-submit" disabled={busy || !selected} type="submit">{busy ? "Saving…" : "Record transaction"}</button>
               <small className="record-disclaimer">This creates a record only. It does not place, route, modify or cancel an order.</small>
