@@ -4,6 +4,7 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     claude_model: str = "claude-sonnet-5"
     market_api_base_url: str = ""
+    market_yfinance_fallback: bool = True
     allowed_origins: str = "https://rogerdc17.github.io,http://localhost:3000"
 
     # Temporary role-based users. These remain server-side only.
