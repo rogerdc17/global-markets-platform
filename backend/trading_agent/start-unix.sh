@@ -2,23 +2,17 @@
 set -e
 cd "$(dirname "$0")"
 
-if [ ! -d ".venv" ]; then
-  echo "Creating Python virtual environment..."
-  python3 -m venv .venv
+if [ ! -x ".venv/bin/python" ]; then
+  echo "DP Alpha is not installed on this computer yet."
+  echo "Run ./setup-unix.sh first."
+  exit 1
 fi
 
 source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+python doctor.py
 
-if [ ! -f ".env" ]; then
-  cp .env.example .env
-  echo
-  echo "Created .env from .env.example."
-  echo "Edit backend/trading_agent/.env before using DP Alpha."
-  echo
-  exit 0
-fi
-
+echo
 echo "Starting DP Alpha on http://127.0.0.1:8000"
+echo "Press Ctrl+C to stop the server."
+echo
 python run_server.py
