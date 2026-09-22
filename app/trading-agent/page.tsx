@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
-import { AgentResult, runTradingAgent, tradingAgentConfigured } from "@/lib/tradingAgent";
+import { AgentResult, AgentRunSummary, getAgentRun, listAgentRuns, runTradingAgent, tradingAgentConfigured } from "@/lib/tradingAgent";
 
 type StoredPosition = {
   id: string;
@@ -30,8 +30,26 @@ export default function TradingAgentPage() {
   const [result, setResult] = useState<AgentResult | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [runs, setRuns] = useState<AgentRunSummary[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   const configured = tradingAgentConfigured();
+
+  async function refreshRuns() {
+    if (!configured) return;
+    setHistoryLoading(true);
+    try {
+      setRuns(await listAgentRuns(12));
+    } catch {
+      // Main auth/offline surfaces already handle connectivity; history is secondary.
+    } finally {
+      setHistoryLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    refreshRuns();
+  }, [configured]);
 
   const portfolio = useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -66,6 +84,7 @@ export default function TradingAgentPage() {
         portfolio,
       });
       setResult(response);
+      await refreshRuns();
     } catch (err) {
       setError(err instanceof Error ? err.message : "TradingAgent request failed.");
     } finally {
@@ -171,6 +190,47 @@ export default function TradingAgentPage() {
             </div>
           </aside>
         </div>
+
+        <section className="agent-history-card">
+          <div className="agent-section-head compact-history-head">
+            <div>
+              <p className="eyebrow">RESEARCH MEMORY</p>
+              <h3>Recent saved runs</h3>
+            </div>
+            <span className="preview-tag">{historyLoading ? "Refreshing…" : `${runs.length} saved`}</span>
+          </div>
+          {runs.length === 0 ? (
+            <div className="empty-state">Completed TradingAgent analyses will be saved here automatically.</div>
+          ) : (
+            <div className="agent-history-list">
+              {runs.map((run) => (
+                <button
+                  type="button"
+                  className="agent-history-row"
+                  key={run.run_id}
+                  onClick={async () => {
+                    setError("");
+                    try {
+                      const detail = await getAgentRun(run.run_id);
+                      setResult(detail.result);
+                      setSymbol(detail.result.symbol);
+                      setHorizon(detail.result.horizon);
+                      setMode(detail.result.mode);
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : "Could not load saved research run.");
+                    }
+                  }}
+                >
+                  <span className="agent-history-symbol">{run.symbol}</span>
+                  <span>{run.horizon}</span>
+                  <span>{run.decision?.replaceAll("_", " ") || "insufficient data"}</span>
+                  <strong>{typeof run.confidence === "number" ? `${run.confidence}%` : "—"}</strong>
+                  <small>{new Date(run.created_at).toLocaleString()}</small>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
 
         {!result ? (
           <section className="agent-empty-state">
