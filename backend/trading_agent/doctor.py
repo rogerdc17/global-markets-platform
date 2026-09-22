@@ -34,8 +34,11 @@ def main() -> int:
 
         if not values.get("ANTHROPIC_API_KEY"):
             warnings.append("ANTHROPIC_API_KEY is blank: TradingAgent AI will be unavailable.")
-        if not values.get("MARKET_API_BASE_URL"):
-            warnings.append("MARKET_API_BASE_URL is blank: live market backend data will be unavailable.")
+        fallback = values.get("MARKET_YFINANCE_FALLBACK", "true").lower() in ("1", "true", "yes", "on")
+        if not values.get("MARKET_API_BASE_URL") and not fallback:
+            warnings.append("No market provider is configured.")
+        elif not values.get("MARKET_API_BASE_URL") and fallback:
+            warnings.append("Using Yahoo Finance/yfinance as research-only market fallback; it is not exchange-authoritative real-time data.")
 
     db = ROOT / "data" / "dp_alpha.db"
     if not db.exists():
