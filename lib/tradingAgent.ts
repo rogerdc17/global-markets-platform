@@ -1,3 +1,5 @@
+import { getAuthToken, logout } from "@/lib/auth";
+
 export type AgentView = {
   name: string;
   stance: "bullish" | "neutral" | "bearish" | "mixed";
@@ -62,11 +64,20 @@ export async function runTradingAgent(payload: Record<string, unknown>): Promise
     throw new Error("TradingAgent backend is not configured yet.");
   }
 
+  const token = getAuthToken();
   const response = await fetch(`${API_BASE}/agent/analyze`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(payload),
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired. Please sign in again.");
+  }
 
   if (!response.ok) {
     let message = `TradingAgent returned ${response.status}`;
