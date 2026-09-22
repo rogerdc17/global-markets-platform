@@ -34,6 +34,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [serverOffline, setServerOffline] = useState(false);
 
   async function refresh() {
     const session = getSession();
@@ -45,8 +46,19 @@ export default function AuthGate({ children }: { children: ReactNode }) {
       return;
     }
 
-    const valid = await validateSession(session);
-    if (!valid) {
+    const validation = await validateSession(session);
+    if (validation === "offline") {
+      setServerOffline(true);
+      setAuthenticated(true);
+      setUsername(session.username);
+      setDisplayName(session.display_name || session.username);
+      setRole(session.role);
+      setReady(true);
+      return;
+    }
+
+    setServerOffline(false);
+    if (validation === "invalid") {
       logout();
       setAuthenticated(false);
       setUsername("");
@@ -80,6 +92,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
     setBusy(true);
     try {
       const session = await login(loginUser.trim(), password);
+      setServerOffline(false);
       setAuthenticated(true);
       setUsername(session.username);
       setDisplayName(session.display_name || session.username);
@@ -110,6 +123,25 @@ export default function AuthGate({ children }: { children: ReactNode }) {
           <p className="eyebrow">DP ALPHA</p>
           <h1>Private backend not connected</h1>
           <p>Configure the private backend URL before using the protected platform.</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (serverOffline && authenticated) {
+    return (
+      <main className="auth-screen">
+        <div className="auth-card">
+          <span className="auth-mark">DP</span>
+          <p className="eyebrow">SERVER STATUS</p>
+          <h1>DP Alpha server is offline</h1>
+          <p>
+            The private server computer is not reachable right now. The GitHub interface is online,
+            but login, portfolios, research and TradingAgent require the DP Alpha computer to be running.
+          </p>
+          <button className="primary-btn auth-submit" type="button" onClick={refresh}>
+            Retry connection
+          </button>
         </div>
       </main>
     );
