@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSession, UserRole } from "@/lib/auth";
 
 type ActiveKey =
+  | "dashboard"
   | "live"
   | "stocks"
   | "clients"
@@ -32,7 +33,7 @@ const internalNav = [
 ] as const;
 
 const clientNav = [
-  ["portfolio", "/client-dashboard", "Dashboard"],
+  ["dashboard", "/client-dashboard", "Dashboard"],
   ["live", "/", "LiveMarket"],
   ["portfolio", "/my-portfolio", "MyPortfolio"],
   ["performance", "/performance", "Performance"],
@@ -42,14 +43,14 @@ const clientNav = [
 ] as const;
 
 export default function Header({ active, status = "Private terminal" }: HeaderProps) {
-  const [role, setRole] = useState<UserRole>("internal");
+  const [role, setRole] = useState<UserRole | null>(null);
 
   useEffect(() => {
     const session = getSession();
     if (session?.role) setRole(session.role);
   }, []);
 
-  const nav = role === "client" ? clientNav : internalNav;
+  const nav = role === "client" ? clientNav : role === "internal" ? internalNav : [];
 
   return (
     <header className="nav-shell">
@@ -59,7 +60,7 @@ export default function Header({ active, status = "Private terminal" }: HeaderPr
         aria-label="DP Alpha home"
       >
         <span className="brand-mark">DP</span>
-        <span>DP Alpha <small className="brand-terminal">{role === "client" ? "Client Portal" : "Terminal"}</small></span>
+        <span>DP Alpha <small className="brand-terminal">{role === "client" ? "Client Portal" : role === "internal" ? "Terminal" : "Private"}</small></span>
       </Link>
 
       <nav className="desktop-nav role-nav" aria-label="Primary">
