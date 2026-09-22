@@ -9,3 +9,7 @@ out/
 
 # Temporary backend runtime records
 backend/trading_agent/data/client_portfolios.json
+backend/trading_agent/data/*.db
+backend/trading_agent/data/*.db-*
+backend/trading_agent/backups/
+backend/trading_agent/.venv/
