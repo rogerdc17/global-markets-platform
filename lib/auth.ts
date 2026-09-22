@@ -72,14 +72,18 @@ export async function login(username: string, password: string): Promise<Session
   return session;
 }
 
-export async function validateSession(session: Session): Promise<boolean> {
-  if (!API_BASE) return false;
+export type SessionValidation = "valid" | "invalid" | "offline";
+
+export async function validateSession(session: Session): Promise<SessionValidation> {
+  if (!API_BASE) return "offline";
   try {
     const response = await fetch(`${API_BASE}/auth/me`, {
       headers: { Authorization: `Bearer ${session.token}` },
     });
-    return response.ok;
+    if (response.ok) return "valid";
+    if (response.status === 401 || response.status === 403) return "invalid";
+    return "offline";
   } catch {
-    return false;
+    return "offline";
   }
 }
