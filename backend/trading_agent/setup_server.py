@@ -21,6 +21,7 @@ REQUIRED_PLACEHOLDERS = {
     "DP_BACKUP_DIR": "./backups",
     "DP_BACKUP_HOURS": "24",
     "ALLOWED_ORIGINS": "http://localhost:3000,http://127.0.0.1:3000,https://rogerdc17.github.io",
+    "MARKET_YFINANCE_FALLBACK": "true",
 }
 
 def read_env(path: Path) -> tuple[list[str], dict[str, str]]:
