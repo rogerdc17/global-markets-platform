@@ -25,8 +25,8 @@ class AnalyzeRequest(BaseModel):
     account_size: float | None = Field(default=None, gt=0)
     max_risk_pct: float = Field(default=1.0, gt=0, le=10)
     stop_price: float | None = Field(default=None, gt=0)
-    portfolio: list[Position] = []
-    candles: list[Candle] = []
+    portfolio: list[Position] = Field(default_factory=list)
+    candles: list[Candle] = Field(default_factory=list)
 
 class EvidenceSource(BaseModel):
     title: str
@@ -41,15 +41,15 @@ class AgentView(BaseModel):
     stance: Stance
     confidence: int = Field(ge=0, le=100)
     summary: str
-    evidence: list[str] = []
+    evidence: list[str] = Field(default_factory=list)
 
 class StageResult(BaseModel):
     stage: str
     stance: Stance
     confidence: int = Field(ge=0, le=100)
     summary: str
-    evidence: list[str] = []
-    objections: list[str] = []
+    evidence: list[str] = Field(default_factory=list)
+    objections: list[str] = Field(default_factory=list)
 
 class TradePlan(BaseModel):
     stance: Stance
@@ -57,7 +57,7 @@ class TradePlan(BaseModel):
     thesis: str
     entry_zone: str | None = None
     invalidation: str | None = None
-    targets: list[str] = []
+    targets: list[str] = Field(default_factory=list)
     risk_reward: str | None = None
     position_size: str | None = None
     portfolio_note: str | None = None
