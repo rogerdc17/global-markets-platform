@@ -21,6 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate backend syntax
+        run: python -m compileall -q backend/trading_agent
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
