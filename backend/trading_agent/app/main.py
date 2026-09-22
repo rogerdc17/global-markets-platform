@@ -5,8 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.auth import LoginRequest, LoginResponse, UserContext, authenticate, require_internal, require_user
-from app.client_store import add_client, add_trade, get_client, list_clients, list_trades, portfolio_summary
+from app.client_store import add_client, add_research_note, add_trade, get_client, list_clients, list_research_notes, list_trades, portfolio_summary
 from app.config import settings
+from app.database import backup_database, init_db
 from app.models import AnalyzeRequest, AnalyzeResponse
 from app.services.orchestrator import analyze
 
@@ -28,6 +29,12 @@ class ClientCreateRequest(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     notes: str = Field(default="", max_length=1000)
 
+class ResearchNoteRequest(BaseModel):
+    symbol: str = Field(min_length=1, max_length=32)
+    title: str = Field(min_length=1, max_length=240)
+    thesis: str = Field(min_length=1, max_length=5000)
+    status: str = Field(default="Watching", max_length=64)
+
 class TradeRecordRequest(BaseModel):
     client_id: str
     symbol: str = Field(min_length=1, max_length=32)
@@ -40,6 +47,10 @@ class TradeRecordRequest(BaseModel):
     note: str = Field(default="", max_length=2000)
     research_run_id: str | None = None
 
+@app.on_event("startup")
+async def startup():
+    init_db()
+
 @app.get("/health")
 async def health():
     return {
@@ -49,6 +60,8 @@ async def health():
         "marketConfigured": bool(settings.market_api_base_url),
         "model": settings.claude_model,
         "executionEnabled": False,
+        "storage": "sqlite",
+        "selfHosted": True,
     }
 
 @app.post("/auth/login", response_model=LoginResponse)
@@ -73,7 +86,7 @@ async def clients(user: UserContext = Depends(require_user)):
 @app.post("/clients")
 async def create_client(request: ClientCreateRequest, user: UserContext = Depends(require_user)):
     require_internal(user)
-    return add_client(request.name, request.notes).model_dump()
+    return add_client(request.name, request.notes, created_by=user.username).model_dump()
 
 @app.get("/clients/{client_id}/portfolio")
 async def client_portfolio(client_id: str, user: UserContext = Depends(require_user)):
@@ -120,6 +133,28 @@ async def record_trade(request: TradeRecordRequest, user: UserContext = Depends(
         created_by=user.username,
     )
     return trade.model_dump()
+
+@app.get("/research")
+async def research_notes(user: UserContext = Depends(require_user)):
+    require_internal(user)
+    return {"notes": [note.model_dump() for note in list_research_notes()]}
+
+@app.post("/research")
+async def create_research_note(request: ResearchNoteRequest, user: UserContext = Depends(require_user)):
+    require_internal(user)
+    return add_research_note(
+        symbol=request.symbol,
+        title=request.title,
+        thesis=request.thesis,
+        status=request.status,
+        created_by=user.username,
+    ).model_dump()
+
+@app.post("/admin/backup")
+async def create_backup(user: UserContext = Depends(require_user)):
+    require_internal(user)
+    path = backup_database()
+    return {"ok": True, "backup": path.name}
 
 @app.post("/agent/analyze", response_model=AnalyzeResponse)
 async def agent_analyze(
