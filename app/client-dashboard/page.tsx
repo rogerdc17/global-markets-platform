@@ -19,7 +19,7 @@ export default function ClientDashboardPage() {
 
   return (
     <main>
-      <Header active="portfolio" status="Client portal" />
+      <Header active="dashboard" status="Client portal" />
       <section className="workspace-shell">
         <p className="eyebrow">CLIENT PORTAL</p>
         <h1 className="workspace-title">Welcome{data?.client.name ? `, ${data.client.name}` : ""}</h1>
