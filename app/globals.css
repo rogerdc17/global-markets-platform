@@ -555,3 +555,611 @@ footer span { max-width: 760px; text-align: right; }
   .stage-card { grid-template-columns:34px minmax(0,1fr); }
   .stage-confidence { grid-column:2; text-align:left; font-size:11px; }
 }
+
+
+/* ===== DP Alpha professional UI pass ===== */
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --content-pad: 30px;
+}
+
+body {
+  min-width: 320px;
+  line-height: 1.45;
+}
+
+.nav-shell,
+.hero,
+.dashboard,
+.roadmap,
+.stock-detail-shell,
+.workspace-shell,
+footer {
+  width: 100%;
+}
+
+.nav-shell {
+  min-height: 70px;
+}
+
+.brand {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.brand > span:last-child {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.desktop-nav {
+  align-items: stretch;
+}
+
+.desktop-nav a {
+  display: flex;
+  align-items: center;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+
+.session-pill {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.hero {
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: clamp(32px, 5vw, 64px);
+  padding-top: 68px;
+  padding-bottom: 54px;
+}
+
+.hero h1 {
+  max-width: 760px;
+  font-size: clamp(50px, 6.3vw, 82px);
+}
+
+.hero-sub,
+.workspace-sub {
+  max-width: 720px;
+}
+
+.market-pulse-card,
+.stocks-panel,
+.side-card,
+.chart-card,
+.company-card,
+.related-card,
+.portfolio-summary article,
+.about-grid article,
+.agent-control-card,
+.agent-method-card,
+.agent-thesis-card,
+.agent-risk-card,
+.agent-empty-state,
+.agent-view-card,
+.source-row,
+.stage-card,
+.confidence-breakdown-grid article,
+.decision-strip {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+}
+
+.dashboard,
+.stock-detail-grid,
+.detail-lower-grid,
+.workspace-grid,
+.agent-layout,
+.trading-agent-grid,
+.agent-report-grid {
+  gap: 20px;
+}
+
+.dashboard,
+.stock-detail-grid,
+.detail-lower-grid,
+.workspace-grid,
+.agent-layout,
+.trading-agent-grid,
+.agent-report-grid {
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+.panel-heading {
+  min-height: 76px;
+}
+
+.filters {
+  row-gap: 10px;
+}
+
+.filters > select {
+  min-width: 150px;
+}
+
+.search-box {
+  max-width: 320px;
+}
+
+table {
+  min-width: 860px;
+}
+
+th,
+td {
+  vertical-align: middle;
+}
+
+th {
+  white-space: nowrap;
+}
+
+tbody tr {
+  transition: background .16s ease;
+}
+
+.primary-btn,
+.position-submit,
+.agent-run-button {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workspace-shell {
+  padding-top: 50px;
+}
+
+.workspace-title {
+  max-width: 1040px;
+  font-size: clamp(42px, 5.4vw, 68px);
+}
+
+.workspace-sub {
+  margin-bottom: 30px;
+}
+
+.portfolio-summary {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.portfolio-summary article {
+  min-height: 88px;
+  justify-content: space-between;
+}
+
+.portfolio-summary strong {
+  line-height: 1.15;
+}
+
+.position-form input,
+.position-form select,
+.agent-form-grid input,
+.agent-form-grid select {
+  min-height: 42px;
+}
+
+.position-form input:focus,
+.position-form select:focus,
+.agent-form-grid input:focus,
+.agent-form-grid select:focus,
+.search-box:focus-within {
+  border-color: rgba(245, 185, 66, .55);
+  box-shadow: 0 0 0 3px rgba(245, 185, 66, .07);
+}
+
+.add-position-card {
+  position: sticky;
+  top: 18px;
+}
+
+.about-shell {
+  max-width: 1220px;
+}
+
+.about-grid {
+  gap: 16px;
+}
+
+.about-grid article {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-grid h2 {
+  margin-top: 24px;
+}
+
+.about-grid p {
+  margin-top: auto;
+}
+
+.stock-identity {
+  min-height: 96px;
+}
+
+.stock-title-block,
+.quote-block {
+  min-width: 0;
+}
+
+.chart-card {
+  min-width: 0;
+}
+
+.price-chart svg {
+  max-height: 340px;
+}
+
+.detail-side .side-card {
+  min-width: 0;
+}
+
+.agent-hero {
+  margin-bottom: 18px;
+}
+
+.agent-stack-badge {
+  max-width: 380px;
+}
+
+.agent-control-card,
+.agent-method-card {
+  min-width: 0;
+}
+
+.agent-form-grid {
+  gap: 14px;
+}
+
+.agent-run-button {
+  min-width: 160px;
+}
+
+.confidence-breakdown-grid article {
+  min-height: 72px;
+}
+
+.agent-cards-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.agent-view-card {
+  min-width: 0;
+}
+
+.agent-view-card p,
+.stage-body p,
+.source-row p {
+  overflow-wrap: anywhere;
+}
+
+.source-row {
+  align-items: start;
+}
+
+.stage-card {
+  grid-template-columns: 42px minmax(0, 1fr) 64px;
+}
+
+.concept-disclaimer {
+  max-width: 100%;
+}
+
+@media (max-width: 1180px) {
+  .agent-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1050px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 270px;
+  }
+
+  .dashboard,
+  .stock-detail-grid,
+  .detail-lower-grid,
+  .workspace-grid,
+  .agent-layout,
+  .trading-agent-grid,
+  .agent-report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .add-position-card {
+    position: static;
+  }
+
+  .workspace-grid > aside,
+  .trading-agent-grid > aside {
+    width: 100%;
+  }
+
+  .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --content-pad: 18px;
+  }
+
+  .nav-shell {
+    min-height: 92px;
+  }
+
+  .session-pill {
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .desktop-nav {
+    margin: 0 -2px;
+    padding-bottom: 1px;
+  }
+
+  .desktop-nav a {
+    min-height: 38px;
+  }
+
+  .hero {
+    padding-top: 38px;
+    padding-bottom: 34px;
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 12.5vw, 54px);
+    line-height: .98;
+    letter-spacing: -.052em;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-top: 20px;
+  }
+
+  .workspace-shell {
+    padding-top: 32px;
+  }
+
+  .workspace-title {
+    font-size: clamp(36px, 10.5vw, 48px);
+    line-height: 1;
+    letter-spacing: -.045em;
+  }
+
+  .workspace-sub {
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 15px 0 26px;
+  }
+
+  .panel-heading {
+    min-height: auto;
+    padding: 20px 18px 16px;
+  }
+
+  .panel-heading h2 {
+    font-size: 20px;
+  }
+
+  .filters {
+    padding: 0 18px 16px;
+  }
+
+  .filters > select {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+
+  .exchange-tabs {
+    width: 100%;
+  }
+
+  .exchange-tabs button {
+    flex: 1 1 0;
+  }
+
+  .search-box {
+    max-width: none;
+  }
+
+  .side-card {
+    padding: 18px;
+  }
+
+  .portfolio-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .portfolio-summary article {
+    min-height: 82px;
+    padding: 14px;
+  }
+
+  .portfolio-summary strong {
+    font-size: 16px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .about-grid article {
+    min-height: 180px;
+    padding: 18px;
+  }
+
+  .stock-breadcrumb {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .stock-title-block {
+    align-items: flex-start;
+  }
+
+  .symbol-line {
+    flex-wrap: wrap;
+  }
+
+  .quote-block > strong {
+    font-size: 26px;
+  }
+
+  .chart-card {
+    padding: 18px 18px 0;
+  }
+
+  .ohlc-grid {
+    margin-left: -18px;
+    margin-right: -18px;
+  }
+
+  .time-tabs {
+    width: 100%;
+  }
+
+  .time-tabs button {
+    flex: 1 1 0;
+    min-height: 34px;
+  }
+
+  .agent-hero {
+    gap: 18px;
+  }
+
+  .agent-stack-badge {
+    max-width: none;
+  }
+
+  .agent-form-grid {
+    padding: 0 18px 18px;
+    gap: 12px;
+  }
+
+  .agent-run-meta {
+    padding: 12px 18px;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .agent-run-button {
+    margin: 0 18px 18px;
+    width: calc(100% - 36px);
+  }
+
+  .agent-warning,
+  .agent-error {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .agent-empty-state {
+    padding: 18px;
+  }
+
+  .confidence-breakdown-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .confidence-breakdown-grid article {
+    min-height: 68px;
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .decision-strip {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .agent-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .source-row {
+    padding: 13px 14px;
+  }
+
+  .stage-card {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    padding: 13px;
+  }
+
+  .stage-confidence {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-shell {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .brand {
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .session-pill {
+    font-size: 8px;
+    max-width: 36vw;
+  }
+
+  .desktop-nav {
+    gap: 18px;
+    font-size: 10px;
+  }
+
+  .hero,
+  .dashboard,
+  .roadmap,
+  .stock-detail-shell,
+  .workspace-shell {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .index-strip-inner {
+    padding-left: 14px;
+  }
+
+  .portfolio-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .portfolio-summary span {
+    font-size: 8px;
+  }
+
+  .portfolio-summary strong {
+    font-size: 15px;
+  }
+
+  .agent-orb {
+    width: 38px;
+    height: 38px;
+  }
+}
