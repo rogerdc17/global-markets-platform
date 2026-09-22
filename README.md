@@ -1,190 +1,92 @@
-# DP Alpha Terminal
+# DP Alpha
 
-Private research, portfolio record-keeping and reporting platform. DP Alpha does not execute trades.
+Private research, portfolio record-keeping and reporting platform.
 
-## Core product
+DP Alpha does **not** execute trades. BUY and SELL entries are records of transactions completed outside the application.
 
-- **LiveMarket** — real Indian market data through a provider-neutral market gateway.
-- **MyStocks** — personal trade ledger, open positions, realized/unrealized P&L, fees and strategy notes.
-- **TradingAgent** — private AI research and risk engine using live market context, portfolio context and current web research.
-- **About** — product overview.
+## Architecture
+
+```text
+GitHub Pages frontend
+        |
+        | HTTPS
+        v
+Self-hosted DP Alpha computer
+        |
+        +-- FastAPI backend
+        +-- SQLite database
+        +-- Research journal
+        +-- Client portfolio records
+        +-- Audit log
+        +-- TradingAgent integrations
+```
+
+The self-hosted computer can be Windows, macOS or Linux.
+
+## Fastest Windows setup
+
+Clone the repository, stay in the repository root, then run:
+
+```text
+setup-dp-alpha-windows.bat
+```
+
+The installer:
+
+1. checks for Python,
+2. creates the local virtual environment,
+3. installs backend dependencies,
+4. creates the private `.env`,
+5. generates `DP_AUTH_SECRET`,
+6. initializes SQLite,
+7. validates the configuration.
+
+After filling any blank login values in:
+
+```text
+backend/trading_agent/.env
+```
+
+start the server with:
+
+```text
+start-dp-alpha-windows.bat
+```
+
+Then verify:
+
+```text
+http://127.0.0.1:8000/health
+```
+
+Manual database backup:
+
+```text
+backup-dp-alpha-windows.bat
+```
+
+For macOS/Linux, see:
+
+```text
+backend/trading_agent/SELF_HOSTING.md
+```
 
 ## Repository structure
 
 ```text
 app/                         Next.js frontend
 components/                  Shared UI
-lib/                         Frontend market + TradingAgent clients
+lib/                         Frontend API clients
 
-workers/market-proxy/        Cloudflare market-data gateway
-backend/trading_agent/       Private-ready FastAPI TradingAgent backend
-
+backend/trading_agent/       Self-hosted FastAPI + SQLite server
+workers/market-proxy/        Optional market-data gateway
 .github/workflows/           GitHub Pages deployment
 ```
 
-## Frontend
-
-The frontend is a static Next.js export deployed to GitHub Pages.
-
-```bash
-npm install
-npm run dev
-```
-
-Environment variables:
-
-```text
-NEXT_PUBLIC_MARKET_API_BASE_URL=https://your-market-gateway.example.com
-NEXT_PUBLIC_TRADING_AGENT_API_BASE_URL=https://your-trading-agent-api.example.com
-```
-
-For GitHub Pages, configure repository variables:
-
-```text
-MARKET_API_BASE_URL
-TRADING_AGENT_API_BASE_URL
-```
-
-The deployment workflow maps them to the public Next.js environment variables during the build.
-
-## LiveMarket data
-
-The frontend never stores market-data credentials.
-
-Current architecture:
-
-```text
-DP Alpha Terminal
-      |
-      v
-Market Gateway
-      |
-      +-- Upstox (current free/live path)
-      |
-      +-- NSE licensed feed / authorized vendor (future production path)
-```
-
-Cloudflare Worker code:
-
-```text
-workers/market-proxy/
-```
-
-Current Worker variables:
-
-```text
-MARKET_PROVIDER=UPSTOX
-ALLOWED_ORIGIN=https://rogerdc17.github.io
-```
-
-Secret:
-
-```text
-UPSTOX_ANALYTICS_TOKEN
-```
-
-Health check:
-
-```text
-GET /health
-```
-
-Normalized live snapshot:
-
-```text
-GET /market/snapshot
-```
-
-When moving to subscribed NSE real-time data, keep the same frontend contract and switch the backend provider:
-
-```text
-MARKET_PROVIDER=NSE
-NSE_GATEWAY_URL=https://your-secure-nse-gateway.example.com
-NSE_GATEWAY_TOKEN=<secret>
-```
-
-The NSE ingestion layer must normalize its output to the same DP Alpha market schema. Keep all licensed-feed credentials and redistribution logic server-side.
-
-## TradingAgent backend
-
-Location:
-
-```text
-backend/trading_agent/
-```
-
-It currently contains:
-
-- FastAPI API
-- Claude research/synthesis provider
-- deterministic technical indicators
-- deterministic portfolio/risk calculations
-- LiveMarket context adapter
-- multi-agent orchestration
-- Docker deployment support
-
-See:
-
-```text
-backend/trading_agent/README.md
-```
-
-Private backend secrets include:
-
-```text
-ANTHROPIC_API_KEY
-MARKET_API_BASE_URL
-```
-
-Do not expose these in the browser.
-
-## MyStocks
-
-The current frontend keeps Dharmin's trade ledger in browser storage for the concept phase.
-
-It tracks:
-
-- buys and sells
-- quantities and execution prices
-- fees
-- strategies and notes
-- timestamps
-- average cost
-- open positions
-- realized P&L
-- unrealized P&L
-
-For production, this should move to authenticated private database storage so the trading history is durable across devices.
-
-## Production priorities
-
-1. Finish real LiveMarket connection.
-2. Add provider-neutral historical OHLC endpoints.
-3. Deploy TradingAgent backend privately.
-4. Add authentication and PostgreSQL.
-5. Persist MyStocks and TradingAgent research history.
-6. Add backtesting and outcome tracking.
-7. Add scanners/alerts.
-8. Add broker connectivity only with explicit human confirmation.
-
-## Security
-
-Never commit:
-
-- Claude API keys
-- Upstox tokens
-- NSE/vendor credentials
-- broker credentials
-- database passwords
-
-DP Alpha Terminal is a decision-support system. It does not guarantee profitable outcomes and should preserve human confirmation for any future order execution.
-
-
-## Role-based portals
-
-DP Alpha now has two temporary roles:
+## User roles
 
 ### Internal
+
 - LiveMarket
 - MyStocks
 - Client Portfolios
@@ -193,9 +95,10 @@ DP Alpha now has two temporary roles:
 - Performance
 - About
 
-Internal users can record transactions that were executed outside DP Alpha. These records feed the client portal.
+Internal users can record transactions completed outside DP Alpha and maintain client records.
 
 ### Client
+
 - Dashboard
 - LiveMarket
 - MyPortfolio
@@ -204,14 +107,110 @@ Internal users can record transactions that were executed outside DP Alpha. Thes
 - Reports
 - About
 
-Client access is read-only and scoped to the client ID embedded in the authenticated session.
+Client access is read-only and scoped to the authenticated client.
 
-## Important execution boundary
+## Local backend storage
 
-DP Alpha is intentionally not a brokerage or order-entry application.
+The backend stores shared records in:
 
-It does not place, route, modify, cancel, or execute securities orders. BUY and SELL values stored in the application describe transactions that have already occurred externally.
+```text
+backend/trading_agent/data/dp_alpha.db
+```
 
-## Temporary storage
+The database contains:
 
-Client records currently use the backend JSON file configured by `DP_DATA_FILE`. This is suitable only for the current development phase. Production should replace it with authenticated PostgreSQL storage, audit logs and durable backups.
+- clients
+- external transaction records
+- research notes
+- audit log
+
+Automatic rolling backups are stored in:
+
+```text
+backend/trading_agent/backups/
+```
+
+These files are excluded from Git.
+
+## Private server configuration
+
+Private configuration is stored in:
+
+```text
+backend/trading_agent/.env
+```
+
+Never commit:
+
+- `.env`
+- SQLite database files
+- backups
+- Claude/API keys
+- market-data credentials
+- tunnel credentials
+
+## Frontend development
+
+```bash
+npm install
+npm run dev
+```
+
+Local frontend environment:
+
+```text
+NEXT_PUBLIC_TRADING_AGENT_API_BASE_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_MARKET_API_BASE_URL=
+```
+
+For GitHub Pages, the workflow reads:
+
+```text
+TRADING_AGENT_API_BASE_URL
+MARKET_API_BASE_URL
+```
+
+from GitHub Actions repository variables.
+
+## Remote access
+
+For internet access, keep FastAPI bound to:
+
+```text
+127.0.0.1:8000
+```
+
+and publish it through a secure HTTPS tunnel such as Cloudflare Tunnel.
+
+Do **not** forward port 8000 directly from a home router.
+
+Detailed self-hosting instructions:
+
+```text
+backend/trading_agent/SELF_HOSTING.md
+```
+
+## Current integration status
+
+The core self-hosted system supports:
+
+- authentication
+- internal/client roles
+- SQLite persistence
+- client portfolio records
+- research notes
+- audit logging
+- automatic backups
+- server offline handling
+
+Optional integrations can be enabled later:
+
+- Claude/TradingAgent
+- live market data
+- historical market data
+
+## Execution boundary
+
+DP Alpha is a research, reporting and record-keeping application.
+
+It does not place, route, modify, cancel or execute securities orders.
