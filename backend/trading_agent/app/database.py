@@ -69,6 +69,40 @@ def init_db() -> None:
                 CREATE INDEX IF NOT EXISTS idx_research_symbol ON research_notes(symbol);
                 CREATE INDEX IF NOT EXISTS idx_research_created_at ON research_notes(created_at);
 
+                CREATE TABLE IF NOT EXISTS agent_runs (
+                    run_id TEXT PRIMARY KEY,
+                    symbol TEXT NOT NULL,
+                    horizon TEXT NOT NULL,
+                    mode TEXT NOT NULL,
+                    request_json TEXT NOT NULL,
+                    result_json TEXT NOT NULL,
+                    created_by TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_agent_runs_symbol ON agent_runs(symbol);
+                CREATE INDEX IF NOT EXISTS idx_agent_runs_created_at ON agent_runs(created_at);
+
+                CREATE TABLE IF NOT EXISTS agent_outcomes (
+                    id TEXT PRIMARY KEY,
+                    run_id TEXT NOT NULL,
+                    horizon_label TEXT NOT NULL,
+                    evaluated_at TEXT NOT NULL,
+                    start_price REAL,
+                    end_price REAL,
+                    return_pct REAL,
+                    benchmark_return_pct REAL,
+                    alpha_pct REAL,
+                    mfe_pct REAL,
+                    mae_pct REAL,
+                    target_hit INTEGER,
+                    invalidation_hit INTEGER,
+                    details TEXT NOT NULL DEFAULT '',
+                    FOREIGN KEY(run_id) REFERENCES agent_runs(run_id)
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_agent_outcomes_run_id ON agent_outcomes(run_id);
+
                 CREATE TABLE IF NOT EXISTS audit_log (
                     id TEXT PRIMARY KEY,
                     actor TEXT NOT NULL,
